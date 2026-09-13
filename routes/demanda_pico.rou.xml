@@ -10,6 +10,12 @@
   Estes valores devem ser recalibrados assim que os dados de campo estiverem disponíveis.
 
   Simulação de 1 hora (3600 s). Duração total do período de pico real: 4 horas.
+
+  Rotas actualizadas para a rede real (ver PROGRESSO.md, Fase 0): a interseccao
+  tem 3 aproximacoes, não 4. Os volumes que antes eram das aproximações Norte e
+  Sul de Salvador Allende (agora uma única aproximação real, SA_in) foram somados.
+  O volume que antes era "W_right" foi dobrado sobre "EM1_straight", porque essa
+  viragem à direita não existe fisicamente nesta interseccao real.
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
 
@@ -18,45 +24,34 @@
     <vType id="autocarro" vClass="bus"     length="10.0" maxSpeed="12.0" accel="1.2" decel="3.5" sigma="0.4" color="0.1,0.5,0.2"/>
     <vType id="pesado"  vClass="truck"     length="8.0" maxSpeed="12.0" accel="1.3" decel="3.5" sigma="0.5" color="0.3,0.3,0.3"/>
 
-    <route id="W_straight" edges="EM_W_in EM_C_out"/>
-    <route id="W_right"    edges="EM_W_in SA_C_out"/>
-    <route id="W_left"     edges="EM_W_in SA_C_out2"/>
-    <route id="E_straight" edges="EM_E_in EM_C_out2"/>
-    <route id="E_right"    edges="EM_E_in SA_C_out2"/>
-    <route id="E_left"     edges="EM_E_in SA_C_out"/>
-    <route id="N_straight" edges="SA_N_in SA_C_out"/>
-    <route id="N_right"    edges="SA_N_in EM_C_out"/>
-    <route id="N_left"     edges="SA_N_in EM_C_out2"/>
-    <route id="S_straight" edges="SA_S_in SA_C_out2"/>
-    <route id="S_right"    edges="SA_S_in EM_C_out2"/>
-    <route id="S_left"     edges="SA_S_in EM_C_out"/>
+    <route id="EM1_straight" edges="552827135#1 552827132"/>
+    <route id="EM1_left"     edges="552827135#1 24769111#11"/>
+    <route id="EM2_straight" edges="725127419#1 725127419#2"/>
+    <route id="EM2_right"    edges="725127419#1 24769111#11"/>
+    <route id="EM2_uturn"    edges="725127419#1 552827132"/>
+    <route id="SA_straight" edges="24769111#9 24769111#11"/>
+    <route id="SA_right"    edges="24769111#9 552827132"/>
+    <route id="SA_left"     edges="24769111#9 725127419#2"/>
 
-    <!-- Eduardo Mondlane, sentido Oeste->Este: fluxo dominante (via primária) -->
-    <flow id="f_W_straight_lig" type="ligeiro"   route="W_straight" begin="0" end="3600" vehsPerHour="420" departLane="best"/>
-    <flow id="f_W_straight_cha" type="chapa"     route="W_straight" begin="0" end="3600" vehsPerHour="110" departLane="best"/>
-    <flow id="f_W_straight_bus" type="autocarro" route="W_straight" begin="0" end="3600" vehsPerHour="18"  departLane="best"/>
-    <flow id="f_W_right_lig"    type="ligeiro"   route="W_right"    begin="0" end="3600" vehsPerHour="95"  departLane="best"/>
-    <flow id="f_W_left_lig"     type="ligeiro"   route="W_left"     begin="0" end="3600" vehsPerHour="70"  departLane="best"/>
-    <flow id="f_W_pesado"       type="pesado"    route="W_straight" begin="0" end="3600" vehsPerHour="25"  departLane="best"/>
+    <!-- Eduardo Mondlane, ramo 1: fluxo dominante (via primária) -->
+    <flow id="f_EM1_straight_lig" type="ligeiro"   route="EM1_straight" begin="0" end="3600" vehsPerHour="515" departLane="best"/>
+    <flow id="f_EM1_straight_cha" type="chapa"     route="EM1_straight" begin="0" end="3600" vehsPerHour="110" departLane="best"/>
+    <flow id="f_EM1_straight_bus" type="autocarro" route="EM1_straight" begin="0" end="3600" vehsPerHour="18"  departLane="best"/>
+    <flow id="f_EM1_pesado"       type="pesado"    route="EM1_straight" begin="0" end="3600" vehsPerHour="25"  departLane="best"/>
+    <flow id="f_EM1_left_lig"     type="ligeiro"   route="EM1_left"     begin="0" end="3600" vehsPerHour="70"  departLane="best"/>
 
-    <!-- Eduardo Mondlane, sentido Este->Oeste -->
-    <flow id="f_E_straight_lig" type="ligeiro"   route="E_straight" begin="0" end="3600" vehsPerHour="390" departLane="best"/>
-    <flow id="f_E_straight_cha" type="chapa"     route="E_straight" begin="0" end="3600" vehsPerHour="105" departLane="best"/>
-    <flow id="f_E_straight_bus" type="autocarro" route="E_straight" begin="0" end="3600" vehsPerHour="16"  departLane="best"/>
-    <flow id="f_E_right_lig"    type="ligeiro"   route="E_right"    begin="0" end="3600" vehsPerHour="80"  departLane="best"/>
-    <flow id="f_E_left_lig"     type="ligeiro"   route="E_left"     begin="0" end="3600" vehsPerHour="65"  departLane="best"/>
-    <flow id="f_E_pesado"       type="pesado"    route="E_straight" begin="0" end="3600" vehsPerHour="20"  departLane="best"/>
+    <!-- Eduardo Mondlane, ramo 2 -->
+    <flow id="f_EM2_straight_lig" type="ligeiro"   route="EM2_straight" begin="0" end="3600" vehsPerHour="390" departLane="best"/>
+    <flow id="f_EM2_straight_cha" type="chapa"     route="EM2_straight" begin="0" end="3600" vehsPerHour="105" departLane="best"/>
+    <flow id="f_EM2_straight_bus" type="autocarro" route="EM2_straight" begin="0" end="3600" vehsPerHour="16"  departLane="best"/>
+    <flow id="f_EM2_pesado"       type="pesado"    route="EM2_straight" begin="0" end="3600" vehsPerHour="20"  departLane="best"/>
+    <flow id="f_EM2_right_lig"    type="ligeiro"   route="EM2_right"    begin="0" end="3600" vehsPerHour="80"  departLane="best"/>
+    <flow id="f_EM2_uturn_lig"    type="ligeiro"   route="EM2_uturn"    begin="0" end="3600" vehsPerHour="65"  departLane="best"/>
 
-    <!-- Salvador Allende, sentido Norte->Sul: fluxo secundário, mas relevante (hospital, faculdade) -->
-    <flow id="f_N_straight_lig" type="ligeiro"   route="N_straight" begin="0" end="3600" vehsPerHour="180" departLane="best"/>
-    <flow id="f_N_straight_cha" type="chapa"     route="N_straight" begin="0" end="3600" vehsPerHour="55"  departLane="best"/>
-    <flow id="f_N_right_lig"    type="ligeiro"   route="N_right"    begin="0" end="3600" vehsPerHour="60"  departLane="best"/>
-    <flow id="f_N_left_lig"     type="ligeiro"   route="N_left"     begin="0" end="3600" vehsPerHour="45"  departLane="best"/>
-
-    <!-- Salvador Allende, sentido Sul->Norte -->
-    <flow id="f_S_straight_lig" type="ligeiro"   route="S_straight" begin="0" end="3600" vehsPerHour="170" departLane="best"/>
-    <flow id="f_S_straight_cha" type="chapa"     route="S_straight" begin="0" end="3600" vehsPerHour="50"  departLane="best"/>
-    <flow id="f_S_right_lig"    type="ligeiro"   route="S_right"    begin="0" end="3600" vehsPerHour="55"  departLane="best"/>
-    <flow id="f_S_left_lig"     type="ligeiro"   route="S_left"     begin="0" end="3600" vehsPerHour="40"  departLane="best"/>
+    <!-- Salvador Allende: fluxo secundário, mas relevante (hospital, faculdade) -->
+    <flow id="f_SA_straight_lig" type="ligeiro" route="SA_straight" begin="0" end="3600" vehsPerHour="350" departLane="best"/>
+    <flow id="f_SA_straight_cha" type="chapa"   route="SA_straight" begin="0" end="3600" vehsPerHour="105" departLane="best"/>
+    <flow id="f_SA_right_lig"    type="ligeiro" route="SA_right"    begin="0" end="3600" vehsPerHour="115" departLane="best"/>
+    <flow id="f_SA_left_lig"     type="ligeiro" route="SA_left"     begin="0" end="3600" vehsPerHour="85"  departLane="best"/>
 
 </routes>

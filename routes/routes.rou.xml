@@ -1,34 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Definição das 12 rotas possíveis na intersecção (3 movimentos de viragem x 4 aproximações).
-  Os identificadores de aresta correspondem aos definidos em edges.edg.xml.
+  Definicao das rotas possiveis na interseccao real (georreferenciada).
+
+  A interseccao real tem apenas 3 aproximacoes, nao 4: a Avenida Eduardo
+  Mondlane, neste troco, e um par de vias de sentido unico (nao uma unica
+  via bidireccional), pelo que aparece como dois ramos distintos (EM1, EM2).
+  A Avenida Salvador Allende e a terceira aproximacao (SA), com 1 faixa por
+  sentido. Ver PROGRESSO.md (seccao 2026-09-13, Fase 0) para o detalhe desta
+  decisao.
+
+  Os IDs de aresta sao os gerados pelo netconvert a partir do OpenStreetMap
+  (net/eduardo_mondlane_salvador_allende.net.xml), nao nomes descritivos,
+  porque sao os identificadores nativos da via no OSM.
+
+  Movimentos possiveis (confirmados pelas ligacoes reais calculadas pelo
+  netconvert, nao todos os cruzamentos matematicamente possiveis existem
+  fisicamente):
+    EM1_in -> EM1_out (recto), EM1_in -> SA_out  (esquerda)
+    EM2_in -> EM2_out (recto), EM2_in -> SA_out  (direita), EM2_in -> EM1_out (inversao)
+    SA_in  -> SA_out  (recto), SA_in  -> EM1_out (direita),  SA_in -> EM2_out (esquerda)
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
 
-    <!-- Tipos de veículos -->
+    <!-- Tipos de veiculos -->
     <vType id="ligeiro" vClass="passenger" length="4.5" maxSpeed="16.7" accel="2.6" decel="4.5" sigma="0.5" color="0.6,0.6,0.6"/>
     <vType id="chapa"   vClass="taxi"      length="5.5" maxSpeed="14.0" accel="2.0" decel="4.0" sigma="0.6" color="0.9,0.7,0.1"/>
     <vType id="autocarro" vClass="bus"     length="10.0" maxSpeed="12.0" accel="1.2" decel="3.5" sigma="0.4" color="0.1,0.5,0.2"/>
     <vType id="pesado"  vClass="truck"     length="8.0" maxSpeed="12.0" accel="1.3" decel="3.5" sigma="0.5" color="0.3,0.3,0.3"/>
 
-    <!-- A partir de Oeste (Eduardo Mondlane) -->
-    <route id="W_straight" edges="EM_W_in EM_C_out"/>
-    <route id="W_right"    edges="EM_W_in SA_C_out"/>
-    <route id="W_left"     edges="EM_W_in SA_C_out2"/>
+    <!-- A partir de Eduardo Mondlane, ramo 1 (via 552827135#1) -->
+    <route id="EM1_straight" edges="552827135#1 552827132"/>
+    <route id="EM1_left"     edges="552827135#1 24769111#11"/>
 
-    <!-- A partir de Este (Eduardo Mondlane) -->
-    <route id="E_straight" edges="EM_E_in EM_C_out2"/>
-    <route id="E_right"    edges="EM_E_in SA_C_out2"/>
-    <route id="E_left"     edges="EM_E_in SA_C_out"/>
+    <!-- A partir de Eduardo Mondlane, ramo 2 (via 725127419#1) -->
+    <route id="EM2_straight" edges="725127419#1 725127419#2"/>
+    <route id="EM2_right"    edges="725127419#1 24769111#11"/>
+    <route id="EM2_uturn"    edges="725127419#1 552827132"/>
 
-    <!-- A partir de Norte (Salvador Allende) -->
-    <route id="N_straight" edges="SA_N_in SA_C_out"/>
-    <route id="N_right"    edges="SA_N_in EM_C_out"/>
-    <route id="N_left"     edges="SA_N_in EM_C_out2"/>
-
-    <!-- A partir de Sul (Salvador Allende) -->
-    <route id="S_straight" edges="SA_S_in SA_C_out2"/>
-    <route id="S_right"    edges="SA_S_in EM_C_out2"/>
-    <route id="S_left"     edges="SA_S_in EM_C_out"/>
+    <!-- A partir de Salvador Allende (via 24769111#9) -->
+    <route id="SA_straight" edges="24769111#9 24769111#11"/>
+    <route id="SA_right"    edges="24769111#9 552827132"/>
+    <route id="SA_left"     edges="24769111#9 725127419#2"/>
 
 </routes>

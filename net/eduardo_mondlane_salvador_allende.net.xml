@@ -1321,12 +1321,15 @@
         <phase duration="5"  state="rrrr"/>
     </tlLogic>
     <tlLogic id="cluster_12168401392_1783252720" type="static" programID="0" offset="0">
-        <phase duration="36" state="rrrrGGggGGgG"/>
-        <phase duration="4"  state="rrrryyggyyyy"/>
-        <phase duration="6"  state="rrrrrrgGrrrr"/>
-        <phase duration="4"  state="rrrrrryyrrrr"/>
-        <phase duration="36" state="GGGGrrrrrrrr"/>
-        <phase duration="4"  state="yyyyrrrrrrrr"/>
+        <!-- Ciclo fixo do baseline (CLAUDE.md, seccao 3): 42s verde EM + 3s
+             amarelo + 42s verde SA + 3s amarelo. Substitui as 6 fases geradas
+             por defeito pelo netconvert (que incluiam uma sub-fase protegida
+             para a viragem a esquerda EM1); simplificacao para 4 fases fixas,
+             coerente com o espaco de accoes binario do agente. -->
+        <phase duration="42" state="rrrrGGggGGgG"/>
+        <phase duration="3"  state="rrrryyyyyyyy"/>
+        <phase duration="42" state="GGGGrrrrrrrr"/>
+        <phase duration="3"  state="yyyyrrrrrrrr"/>
     </tlLogic>
 
     <junction id="10316210514" type="dead_end" x="301.53" y="1379.23" incLanes="4360405#5_0" intLanes="" shape="302.80,1378.25 300.26,1380.21"/>

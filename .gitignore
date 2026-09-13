@@ -6,3 +6,4 @@ venv/
 *.keras
 outputs/treino_*.csv
 net/osm_real/*.osm.xml
+.claude/

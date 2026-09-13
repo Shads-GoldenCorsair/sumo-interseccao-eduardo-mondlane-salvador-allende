@@ -207,14 +207,34 @@ skill `scientific-writer-isutc` usada em todo o resto do trabalho:
 
 ## 10. Estado actual do trabalho (actualizar isto à medida que avança)
 
-- [x] Rede SUMO construída (geometria correcta, coordenadas locais)
-- [x] Cenários de procura (pico e baixo fluxo) com estimativas de engenharia
+Histórico detalhado, sessão a sessão, em `PROGRESSO.md` — este bloco é só o
+resumo do estado actual.
+
+- [x] Rede SUMO construída (geometria correcta, coordenadas locais) — versão
+      manual, arquivada em `net/manual_backup/`
+- [x] Rede georreferenciada com dados reais do OpenStreetMap. **Descoberta
+      importante:** a interseccão real tem apenas 3 aproximações, não 4
+      (Eduardo Mondlane, neste troço, é um par de vias de sentido único, não
+      uma via bidireccional). Decisão tomada com o autor: adaptar o espaço
+      de estados de 9 para 7 valores (3 filas + 3 esperas + 1 fase). Ver
+      `PROGRESSO.md`, secção "Fase 0", para o detalhe completo.
+- [x] Cenários de procura (pico e baixo fluxo) com estimativas de engenharia,
+      reescritos para os IDs de aresta reais
 - [x] Baseline de tempo fixo simulado e registado (40,5s espera média em
-      pico, 9,6s em baixo fluxo)
-- [x] Agente DQN implementado e testado (pipeline funcional confirmado)
-- [ ] Rede georreferenciada com dados reais do OpenStreetMap
+      pico, 9,6s em baixo fluxo) — **nota:** este número foi medido com a
+      rede manual antiga, antes da georreferenciação; precisa de ser
+      remedido com a rede real antes da comparação final do Capítulo V
+- [x] Agente DQN implementado (`agente_dqn/`: `sumo_env.py`, `dqn_agent.py`,
+      `train.py`), com auto-testes, testado nesta máquina (Python 3.11 num
+      venv próprio, TensorFlow 2.21)
+- [x] Optimização de velocidade de treino (intervalo de decisão de 5s,
+      inferência sem overhead de `.predict()`) — ver `PROGRESSO.md`
 - [ ] Dados de procura reais (pendente resposta das entidades contactadas)
+- [ ] Remedir o baseline de tempo fixo com a rede real georreferenciada
 - [ ] Treino completo (5 sementes × N episódios) para o cenário de pico
 - [ ] Treino completo para o cenário de baixo fluxo
 - [ ] Análise comparativa DQN vs. baseline, para o Capítulo V
+- [ ] Actualizar Capítulo II (secção 2.4.2) e Capítulo IV com a mudança de
+      4 para 3 aproximações e do vector de estado de 9 para 7 (pendente
+      indicação do autor para tocar no texto da tese)
 - [ ] Redacção dos Capítulos V e VI, a partir de resultados reais
