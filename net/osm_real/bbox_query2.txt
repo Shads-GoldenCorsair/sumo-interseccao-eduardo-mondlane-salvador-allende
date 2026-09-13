@@ -1,0 +1,7 @@
+[out:xml][timeout:90][bbox:-25.9800,32.5800,-25.9620,32.5980];
+(
+  node;
+  way;
+  relation;
+);
+out meta;
