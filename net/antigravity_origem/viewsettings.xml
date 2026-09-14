@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewsettings>
+    <scheme name="real_world">
+        <viewport zoom="450" x="90" y="70"/>
+        <delay value="50"/>
+        <edges laneWidthExaggeration="1.0" showLaneMarkings="true" showLinkDecals="false" showRails="false"/>
+        <vehicles vehicleMode="0" vehicleQuality="2" vehicle_scale="1.0" showBlinker="true" vehicleName_show="false" vehicleValue_show="false"/>
+        <persons personMode="0" personQuality="2" person_scale="1.0" personName_show="false" personValue_show="false"/>
+        <junctions drawShape="true" drawCrossingsAndWalkingareas="true"/>
+        <polys polyName_show="false"/>
+    </scheme>
+</viewsettings>

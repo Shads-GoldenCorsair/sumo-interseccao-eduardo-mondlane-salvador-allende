@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Lógica Semafórica Coordenada para o Cruzamento Central (TL_MAIN)
+    Avenida Eduardo Mondlane x Avenida Salvador Allende (17 links)
+    0: mondlane_ES_cen_in -> allende_S_out (viragem esquerda com cedência)
+    1,2: mondlane_ES_cen_in -> mondlane_WS_cen_1 (em frente central Oeste)
+    3: allende_N_in -> mondlane_EN_lat_bus (viragem esquerda para lateral Este)
+    4,5: allende_N_in -> allende_S_out (em frente Allende)
+    6: allende_N_in -> mondlane_WS_lat_bus (viragem direita para lateral Oeste)
+    7: mondlane_WN_lat_in -> mondlane_EN_lat_bus (estritamente em frente; proibido virar à direita)
+    8,9: mondlane_WN_cen_in -> mondlane_EN_cen_1 (em frente central Este)
+    10: mondlane_WN_cen_in -> allende_S_out (viragem direita central)
+    11: mondlane_ES_lat_in -> allende_S_out (viragem esquerda lateral permitida)
+    12: mondlane_ES_lat_in -> mondlane_WS_lat_bus (em frente lateral Sul)
+    13: passadeira c0 (Salvador Allende Sul - largura 2.0m)
+    14: passadeira c1 (Eduardo Mondlane Este - largura 2.0m)
+    15: passadeira c2 (Salvador Allende Norte - largura 2.0m)
+    16: passadeira c3 (Eduardo Mondlane Oeste - largura 2.0m)
+-->
+<tlLogics xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/tllogic_file.xsd">
+
+    <tlLogic id="TL_MAIN" type="static" programID="coord_plan" offset="0">
+        <!-- Fase 1: Verde para Avenida Eduardo Mondlane + Passadeiras Salvador Allende Norte e Sul -->
+        <phase duration="35" state="gGGrrrrGGGggGGrGr"/>
+
+        <!-- Fase 2: Amarelo de desobstrução para Eduardo Mondlane -->
+        <phase duration="4"  state="yyyrrrryyyyyyrrrr"/>
+
+        <!-- Fase 3: Vermelho geral de segurança -->
+        <phase duration="2"  state="rrrrrrrrrrrrrrrrr"/>
+
+        <!-- Fase 4: Verde para Avenida Salvador Allende + Passadeiras Eduardo Mondlane Este e Oeste -->
+        <phase duration="25" state="rrrGGGGrrrrrrrGrG"/>
+
+        <!-- Fase 5: Amarelo de desobstrução para Salvador Allende -->
+        <phase duration="4"  state="rrryyyyrrrrrrrrrr"/>
+
+        <!-- Fase 6: Vermelho geral de segurança -->
+        <phase duration="2"  state="rrrrrrrrrrrrrrrrr"/>
+    </tlLogic>
+
+</tlLogics>

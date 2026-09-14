@@ -263,11 +263,11 @@
     </edge>
 
     <tlLogic id="TL_MAIN" type="static" programID="coord_plan" offset="0">
-        <phase duration="40" state="gGGrrrrGGGggGGrGr"/>
-        <phase duration="3"  state="yyyrrrryyyyyyrrrr"/>
+        <phase duration="35" state="gGGrrrrGGGggGGrGr"/>
+        <phase duration="4"  state="yyyrrrryyyyyyrrrr"/>
         <phase duration="2"  state="rrrrrrrrrrrrrrrrr"/>
-        <phase duration="40" state="rrrGGGGrrrrrrrGrG"/>
-        <phase duration="3"  state="rrryyyyrrrrrrrrrr"/>
+        <phase duration="25" state="rrrGGGGrrrrrrrGrG"/>
+        <phase duration="4"  state="rrryyyyrrrrrrrrrr"/>
         <phase duration="2"  state="rrrrrrrrrrrrrrrrr"/>
     </tlLogic>
 

@@ -55,7 +55,7 @@ classificação ou regressão.
 | Alternativa considerada | PPO (mais estável, mas mais complexo de afinar) — não implementar agora, só se o DQN se mostrar instável |
 | Linguagem | Python 3 |
 | Framework de ML | TensorFlow / Keras |
-| Espaço de estados | Vector de 9 valores: 4 filas (uma por aproximação) + 4 tempos de espera acumulados + 1 fase actual do semáforo |
+| Espaço de estados | Vector de 17 valores: fila + tempo de espera por FAIXA (não por via inteira, 8 faixas nas 5 aproximações) + 1 fase actual do semáforo. Era 9/4-aproximações no plano inicial; alterado com aprovação explícita do autor à medida que o modelo da via ficou mais fiel à realidade (histórico completo em PROGRESSO.md) |
 | Espaço de acções | Discreto, 2 valores: 0 = manter fase actual, 1 = mudar de fase |
 | Recompensa | Negativo da soma dos tempos de espera em todas as aproximações, menos uma penalização de 5.0 se a acção mudou de fase (evita oscilação excessiva) |
 | Estabilização do treino | Experience replay (buffer de 10000 transições) + rede-alvo, actualizada a cada 5 episódios |
@@ -106,28 +106,34 @@ desempenho final treinado.
 
 ---
 
-## 5. ⚠️ Limitação crítica a resolver primeiro: a rede não está georreferenciada
+## 5. Histórico da rede (manual → OpenStreetMap real → adaptada)
 
-A rede em `net/` foi **construída manualmente** (nós e arestas em coordenadas
-locais, não latitude/longitude reais), porque o ambiente onde foi criada não
-tinha acesso à internet para o OpenStreetMap. A topologia está correcta
-(4 aproximações ortogonais, 2 faixas/sentido em Eduardo Mondlane, 1 faixa/
-sentido em Salvador Allende), mas as coordenadas geográficas exactas não são
-reais.
+A rede já passou por 3 gerações, documentadas em detalhe no `PROGRESSO.md`:
 
-**Primeira tarefa a fazer aqui, com o teu acesso à internet:**
+1. **Manual** (coordenadas locais, não reais) — versão inicial.
+2. **Georreferenciada real** (OpenStreetMap, via Overpass API + netconvert)
+   — resolveu a falta de coordenadas reais, mas revelou dados OSM
+   incompletos nesta zona (sem passeio mapeado, geometria de baía de
+   autocarro impossível de construir de forma fiável com o netconvert,
+   apesar de várias tentativas), e uma descoberta importante: a
+   interseccão real tem só 3 aproximações, não 4 (Eduardo Mondlane é um
+   par de vias de sentido único aqui, não uma avenida bidireccional).
+3. **Adaptada de rede de referência** (actual, `net/eduardo_mondlane_salvador_allende.net.xml`)
+   — a partir de uma rede esquemática construída por outra ferramenta de
+   IA (`net/antigravity_origem/`, ver PROGRESSO.md), com condução à
+   esquerda nativa (correcta para Moçambique), que já resolvia de forma
+   limpa os problemas que a rede georreferenciada não conseguia
+   (passadeiras, baía de autocarro física, faixas central/lateral com
+   restrições correctas). Já não é uma rede geograficamente exacta
+   (coordenadas esquemáticas, não OSM), mas reflecte melhor o
+   comportamento real do trânsito nesta interseccão. **5 aproximações**
+   (Eduardo Mondlane com faixa central + lateral em cada sentido, mais
+   Salvador Allende).
 
-```bash
-python3 $SUMO_HOME/tools/osmWebWizard.py
-```
-
-Isto abre uma janela do browser com um mapa. Navegar até à intersecção da
-Av. Eduardo Mondlane com a Av. Salvador Allende, em Maputo, seleccionar a
-área, e descarregar a rede real. Substituir os ficheiros em `net/` por esta
-versão real, mantendo os nomes de aresta o mais próximo possível dos actuais
-(`EM_W_in`, `EM_E_in`, `SA_N_in`, `SA_S_in`, etc.) para não partir os scripts
-Python já escritos — ou, se os nomes mudarem, actualizar `sumo_env.py`
-(dicionário `ARESTAS_ENTRADA`) em conformidade.
+Esta é uma mudança de arquitectura sinalizada e com aprovação explícita do
+autor (não decidida unilateralmente). Se precisares de voltar à
+georreferenciação exacta, os ficheiros da tentativa OSM ficam preservados
+em `net/osm_real/`.
 
 ---
 

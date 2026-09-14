@@ -1,35 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Cenário de PROCURA ELEVADA (hora de pico), simulando os intervalos
-  05h00-09h00 e 15h00-19h00 documentados no Capítulo III, secção 3.1.6.2.
-
-  IMPORTANTE: os volumes (vehsPerHour/personsPerHour) são ESTIMATIVAS DE
-  ENGENHARIA, não contagens de campo reais (ver Capítulo III, secção
-  3.1.5). Recalibrar quando houver dados reais.
-
-  ORIGEM: rede e rotas adaptadas de Desktop/antigravity sumo/ (rede
-  construída por outra ferramenta de IA, condução à esquerda nativa,
-  ver PROGRESSO.md para o histórico completo desta mudança de rede).
-  Ficheiro de rotas original preservado em net/antigravity_origem/ para
-  referência; este é a versão adaptada usada activamente pelo projecto.
-
-  Cruzamento Av. Eduardo Mondlane x Av. Salvador Allende (Maputo)
-  - Salvador Allende é SENTIDO ÚNICO (Norte -> Sul), sem faixas opostas
-  - Eduardo Mondlane: pista Norte(Este) e Sul(Oeste) divididas por linha
-    contínua, cada uma com faixa central (só carros) e faixa lateral
-    (chapas, autocarros e carros)
-  - Passadeiras integradas mesmo antes do semáforo central
-  - Baía de autocarro: faixas de saída/entrada mais próximas da passadeira
-  - Chapas (taxi) e autocarros (bus) circulam exclusivamente nas laterais
+    Ficheiro de Rotas e Tráfego para Simulação no SUMO
+    Cruzamento Av. Eduardo Mondlane x Av. Salvador Allende (Maputo)
+    - Salvador Allende é SENTIDO ÚNICO (Norte -> Sul): NÃO TEM FAIXAS OPOSTAS
+    - Linha divisória no mesmo sentido é tracejada (M1)
+    - Eduardo Mondlane tem pista Norte (Este) e Sul (Oeste) divididas por linha contínua (M2)
+    - Passadeiras integradas mesmo antes do semáforo central
+    - Saídas e entradas de rampas mais próximas da passadeira
+    - Chapas (taxi) e Machimbombos (bus) circulam exclusivamente pelas laterais
+    - Carros ligeiros (car) podem circular nas centrais ou laterais
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
 
     <!-- ==================================================================== -->
     <!-- DEFINIÇÃO DE TIPOS DE VEÍCULOS E PEÕES PERSONALIZADOS               -->
     <!-- ==================================================================== -->
-    <vType id="ligeiro"   vClass="passenger" guiShape="passenger/sedan" length="4.5" width="1.8" maxSpeed="13.89" color="0.95,0.75,0.1" accel="2.6" decel="4.5" sigma="0.5"/>
+    <vType id="car"   vClass="passenger" guiShape="passenger/sedan" length="4.5" width="1.8" maxSpeed="13.89" color="0.95,0.75,0.1" accel="2.6" decel="4.5" sigma="0.5"/>
     <vType id="chapa" vClass="taxi"      guiShape="passenger/van"   length="5.2" width="1.9" maxSpeed="13.89" color="1.0,1.0,1.0" accel="2.8" decel="4.5" sigma="0.7"/>
-    <vType id="autocarro"   vClass="bus"       guiShape="bus"             length="12.0" width="2.5" maxSpeed="11.11" color="0.1,0.7,0.2" accel="1.2" decel="3.5" sigma="0.3"/>
+    <vType id="bus"   vClass="bus"       guiShape="bus"             length="12.0" width="2.5" maxSpeed="11.11" color="0.1,0.7,0.2" accel="1.2" decel="3.5" sigma="0.3"/>
 
     <!-- Perfis Personalizados de Peões (Vestuário, Ritmo e Estilo de Maputo) -->
     <vType id="ped_mulher_capulana" vClass="pedestrian" guiShape="pedestrian" width="0.45" length="0.40" maxSpeed="1.25" color="0.95,0.20,0.35"/>
@@ -88,31 +76,31 @@
 
     <!-- ======================= TEMPO BEGIN = 0 ============================ -->
     <!-- Carros ligeiros na via central de Eduardo Mondlane -->
-    <flow id="flow_car_E_cen"  type="ligeiro" route="r_mondlane_E_cen" begin="0" end="3600" vehsPerHour="400"/>
-    <flow id="flow_car_W_cen"  type="ligeiro" route="r_mondlane_W_cen" begin="0" end="3600" vehsPerHour="400"/>
+    <flow id="flow_car_E_cen"  type="car" route="r_mondlane_E_cen" begin="0" end="3600" vehsPerHour="400"/>
+    <flow id="flow_car_W_cen"  type="car" route="r_mondlane_W_cen" begin="0" end="3600" vehsPerHour="400"/>
 
     <!-- Carros ligeiros que optam por circular na faixa lateral -->
-    <flow id="flow_car_E_lat"  type="ligeiro" route="r_mondlane_E_lat" begin="0" end="3600" vehsPerHour="100"/>
-    <flow id="flow_car_W_lat"  type="ligeiro" route="r_mondlane_W_lat" begin="0" end="3600" vehsPerHour="100"/>
+    <flow id="flow_car_E_lat"  type="car" route="r_mondlane_E_lat" begin="0" end="3600" vehsPerHour="100"/>
+    <flow id="flow_car_W_lat"  type="car" route="r_mondlane_W_lat" begin="0" end="3600" vehsPerHour="100"/>
 
     <!-- Chapas circulando EXCLUSIVAMENTE nas faixas laterais (proibidos no meio) -->
     <flow id="flow_chapa_E_lat" type="chapa" route="r_mondlane_E_lat" begin="0" end="3600" vehsPerHour="150"/>
     <flow id="flow_chapa_W_lat" type="chapa" route="r_mondlane_W_lat" begin="0" end="3600" vehsPerHour="150"/>
 
     <!-- Salvador Allende (Sentido Único Norte -> Sul) -->
-    <flow id="flow_allende_S"               type="ligeiro" route="r_allende_S_straight"        begin="0" end="3600" vehsPerHour="350"/>
+    <flow id="flow_allende_S"               type="car" route="r_allende_S_straight"        begin="0" end="3600" vehsPerHour="350"/>
     <!-- Viragens para Este (entram na lateral primeiro; uma continua e outra usa rampa) -->
-    <flow id="flow_allende_S_turn_E_lat"    type="ligeiro" route="r_allende_S_turn_E_lat"    begin="0" end="3600" vehsPerHour="50"/>
-    <flow id="flow_allende_S_turn_E_to_cen" type="ligeiro" route="r_allende_S_turn_E_to_cen" begin="0" end="3600" vehsPerHour="50"/>
+    <flow id="flow_allende_S_turn_E_lat"    type="car" route="r_allende_S_turn_E_lat"    begin="0" end="3600" vehsPerHour="50"/>
+    <flow id="flow_allende_S_turn_E_to_cen" type="car" route="r_allende_S_turn_E_to_cen" begin="0" end="3600" vehsPerHour="50"/>
     <!-- Viragens para Oeste (entram na lateral primeiro; uma continua e outra usa rampa) -->
-    <flow id="flow_allende_S_turn_W_lat"    type="ligeiro" route="r_allende_S_turn_W_lat"    begin="0" end="3600" vehsPerHour="50"/>
-    <flow id="flow_allende_S_turn_W_to_cen" type="ligeiro" route="r_allende_S_turn_W_to_cen" begin="0" end="3600" vehsPerHour="50"/>
+    <flow id="flow_allende_S_turn_W_lat"    type="car" route="r_allende_S_turn_W_lat"    begin="0" end="3600" vehsPerHour="50"/>
+    <flow id="flow_allende_S_turn_W_to_cen" type="car" route="r_allende_S_turn_W_to_cen" begin="0" end="3600" vehsPerHour="50"/>
 
     <!-- Viragens de Mondlane para Salvador Allende -->
-    <flow id="flow_turn_S_from_W"     type="ligeiro" route="r_mondlane_turn_allende_E"     begin="0" end="3600" vehsPerHour="40"/>
-    <flow id="flow_turn_S_from_E"     type="ligeiro" route="r_mondlane_turn_allende_W"     begin="0" end="3600" vehsPerHour="40"/>
+    <flow id="flow_turn_S_from_W"     type="car" route="r_mondlane_turn_allende_E"     begin="0" end="3600" vehsPerHour="40"/>
+    <flow id="flow_turn_S_from_E"     type="car" route="r_mondlane_turn_allende_W"     begin="0" end="3600" vehsPerHour="40"/>
     <!-- Apenas ES_lat_in pode virar para Salvador Allende Sul da lateral -->
-    <flow id="flow_turn_S_from_lat_E" type="ligeiro" route="r_mondlane_turn_allende_lat_E" begin="0" end="3600" vehsPerHour="30"/>
+    <flow id="flow_turn_S_from_lat_E" type="car" route="r_mondlane_turn_allende_lat_E" begin="0" end="3600" vehsPerHour="30"/>
 
     <!-- Peões nas Passadeiras Transversais (Eduardo Mondlane) -->
     <personFlow id="peds_cross_west_mulher"    type="ped_mulher_capulana" begin="0" end="3600" personsPerHour="30">
@@ -137,7 +125,7 @@
         <walk from="mondlane_WS_lat_bus" to="mondlane_WN_lat_in"/>
     </personFlow>
     <!-- Machimbombos circulando EXCLUSIVAMENTE nas faixas laterais e parando nos [BUS] -->
-    <flow id="flow_bus_Eastbound" type="autocarro" route="r_mondlane_E_lat" begin="10" end="3600" period="180">
+    <flow id="flow_bus_Eastbound" type="bus" route="r_mondlane_E_lat" begin="10" end="3600" period="180">
         <stop busStop="busStop_EduardoMondlane_NorteEste" duration="20"/>
     </flow>
 
@@ -146,14 +134,14 @@
         <walk from="mondlane_EN_lat_bus" to="mondlane_ES_lat_in"/>
     </personFlow>
     <!-- Carros saindo da via central para a lateral a partir da faixa mais próxima -->
-    <flow id="flow_car_diverge_W" type="ligeiro" route="r_diverge_W" begin="15" end="3600" vehsPerHour="80"/>
-    <flow id="flow_car_merge_E"   type="ligeiro" route="r_merge_E"   begin="15" end="3600" vehsPerHour="60"/>
+    <flow id="flow_car_diverge_W" type="car" route="r_diverge_W" begin="15" end="3600" vehsPerHour="80"/>
+    <flow id="flow_car_merge_E"   type="car" route="r_merge_E"   begin="15" end="3600" vehsPerHour="60"/>
 
     <!-- ======================= TEMPO BEGIN = 20 =========================== -->
     <personFlow id="peds_cross_allende_N_mulher" type="ped_mulher_capulana" begin="20" end="3600" personsPerHour="25">
         <walk from="mondlane_EN_lat_bus" to="mondlane_WN_lat_in"/>
     </personFlow>
-    <flow id="flow_bus_Westbound" type="autocarro" route="r_mondlane_W_lat" begin="20" end="3600" period="180">
+    <flow id="flow_bus_Westbound" type="bus" route="r_mondlane_W_lat" begin="20" end="3600" period="180">
         <stop busStop="busStop_EduardoMondlane_SulOeste" duration="20"/>
     </flow>
 
@@ -161,7 +149,7 @@
     <personFlow id="peds_cross_allende_S_homem" type="ped_homem_trabalho" begin="25" end="3600" personsPerHour="25">
         <walk from="mondlane_ES_lat_in" to="mondlane_WS_lat_bus"/>
     </personFlow>
-    <flow id="flow_car_diverge_E" type="ligeiro" route="r_diverge_E" begin="25" end="3600" vehsPerHour="80"/>
-    <flow id="flow_car_merge_W"   type="ligeiro" route="r_merge_W"   begin="25" end="3600" vehsPerHour="60"/>
+    <flow id="flow_car_diverge_E" type="car" route="r_diverge_E" begin="25" end="3600" vehsPerHour="80"/>
+    <flow id="flow_car_merge_W"   type="car" route="r_merge_W"   begin="25" end="3600" vehsPerHour="60"/>
 
 </routes>

@@ -13,6 +13,9 @@
     <processing>
         <time-to-teleport value="300"/>
         <collision.action value="warn"/>
+        <pedestrian.model value="striping"/>
+        <pedestrian.striping.stripe-width value="0.55"/>
+        <pedestrian.striping.jamtime.crossing value="60"/>
     </processing>
     <report>
         <verbose value="true"/>

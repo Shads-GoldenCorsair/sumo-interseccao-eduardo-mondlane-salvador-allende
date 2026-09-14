@@ -684,6 +684,89 @@ colisão.
   Allende a 1 faixa) e não são mais representativos. Repetir o teste de
   fumo antes do treino completo no Colab.
 
+## 2026-09-14 — Sessão 2: adopção definitiva da rede antigravity sumo
+
+Depois da tentativa de reconstruir a travessia de peões com `<crossing>`
+falhar (ver entrada anterior "refine"), o autor decidiu: **usar
+directamente os ficheiros de `Desktop/antigravity sumo/` como a nossa
+rede**, copiando e adaptando ao nosso projecto, em vez de continuar a
+tentar corrigir a rede georreferenciada do OpenStreetMap.
+
+**O que foi feito:**
+- Ficheiros de origem copiados para `net/antigravity_origem/` (referência,
+  não usados directamente pelo SUMO).
+- `net/eduardo_mondlane_salvador_allende.net.xml` substituído pela rede
+  compilada da referência (`mondlane_allende.net.xml`), que já tem
+  `--lefthand true` (condução à esquerda nativa, correcta para
+  Moçambique) e uma topologia mais simples que permitiu às passadeiras
+  funcionarem de imediato (algo que a rede georreferenciada nunca
+  conseguiu, apesar de várias tentativas).
+- `net/paragens.add.xml` substituído pelo `busstops.add.xml` da
+  referência (2 paragens de autocarro, uma por sentido de Eduardo
+  Mondlane, cada uma numa baía física própria).
+- **`tlLogic` ajustado** para o nosso ciclo fixo documentado no
+  `CLAUDE.md` (originalmente a referência tinha 35s/25s assimétricos com
+  amarelo de 4s): fases de 40s (não 42s) + 3s amarelo, para caber um
+  vermelho geral de 2s antes de cada mudança de verde, mantendo a duração
+  total do ciclo em 90s. **Descoberta importante:** a primeira tentativa,
+  sem o vermelho geral (para bater certo com o formato exacto 42/3/42/3
+  já documentado), causou uma **colisão real entre dois veículos** num
+  teste (dois veículos a fundir na mesma faixa lateral sem clareamento
+  suficiente). O vermelho geral foi reposto, resolvendo o problema;
+  fica documentado como desvio necessário face ao ciclo exacto descrito
+  no `CLAUDE.md` original (a duração total do ciclo mantém-se igual).
+- `routes/demanda_pico.rou.xml` = rotas da referência adaptadas (vTypes
+  renomeados para a convenção do projecto: `car`→`ligeiro`, `bus`→
+  `autocarro`, `chapa` mantido). Inclui peões com perfis nomeados
+  (idoso, estudante, vendedora, etc.), que agora funcionam correctamente
+  (a rede da referência já tem passadeiras reais, ao contrário da nossa
+  tentativa anterior).
+- `routes/demanda_baixo_fluxo.rou.xml` gerado por escala automática a
+  partir do pico (~15% dos veículos, ~30% dos peões, autocarros menos
+  frequentes), mesma lógica das versões anteriores.
+- `routes/routes.rou.xml` e `routes/vtypes.rou.xml` actualizados como
+  documentação de referência (sem fluxos activos).
+- `config/*.sumocfg`: acrescentadas as opções de peões da referência
+  (`pedestrian.model=striping`, largura de risca 0.55, tempo de
+  engarrafamento em passadeira 60s).
+- `agente_dqn/sumo_env.py`:
+  - `ARESTAS_ENTRADA` passou de 3 para **5 aproximações** (Eduardo
+    Mondlane ganhou faixa central e lateral em cada sentido, em vez de
+    uma aresta só por sentido). Faixas de veículo totais mantêm-se em 8
+    (coincidência: 2+1+2+1+2), por isso o **estado continua a ter 17
+    valores**, não muda a dimensão, só a composição.
+  - `ID_SEMAFORO` = `"TL_MAIN"` (nome da referência, não mais o ID
+    composto do OSM).
+  - `FASE_*`: passou de 4 para 6 índices de fase (2 vermelhos gerais
+    novos), `step()` actualizado para avançar pela sequência completa
+    amarelo→vermelho geral→verde ao mudar de fase.
+- Removido `net/manual_backup/` (rede manual da Fase 0, definitivamente
+  obsoleta a esta altura, recuperável no histórico do git se necessário).
+
+**Validado:** `sumo -c` em ambos os cenários sem erros nem colisões,
+auto-teste de `sumo_env.py` confirma 17 valores. **Teste de fumo
+confirmado** (3 episódios, baixo fluxo): recompensa -3271.0, -1726.0,
+-2894.0. Melhora claramente do 1.º para os seguintes; alguma variação
+entre o 2.º e 3.º episódio (esperada com só 3 episódios e tráfego
+aleatório sem semente fixa por episódio). A magnitude é maior que nas
+redes anteriores (eram ~-100 a -450), consistente com esta rede ter mais
+aproximações, mais volume e um ciclo semafórico mais longo (90s vs 90s
+antes também, mas mais filas a acumular com 5 aproximações).
+
+**Baseline novo:** 20,6s pico (2254 viagens), 14,4s baixo fluxo (348
+viagens). Mais alto que a versão anterior (12,0s/9,9s), plausível dado
+mais volume total e mais movimentos de conflito na rede da referência;
+não comparável directamente com os valores anteriores (rede diferente).
+
+**Nota para a tese, a reflectir nos capítulos:** esta troca de rede altera
+a natureza da "georreferenciação" que o Capítulo III descrevia como
+objectivo — a rede actual já não usa coordenadas geográficas reais do
+OpenStreetMap, é uma rede esquemática desenhada para reflectir o
+comportamento de trânsito real da interseccão (condução à esquerda,
+faixas central/lateral, baía de autocarro, passadeiras), não a sua
+geometria exacta. Isto precisa de ser reflectido no texto do Capítulo III
+quando for escrito, com a devida honestidade sobre a origem da rede.
+
 ## Como usar este ficheiro
 
 Cada sessão de trabalho futura deve acrescentar uma secção nova aqui, com

@@ -1,0 +1,137 @@
+<edges xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/edges_file.xsd">
+
+    
+    
+    
+
+    
+    <edge id="mondlane_WN_cen_1" from="N_W_cen_in" to="N_WN_split" numLanes="2" speed="13.89" priority="3">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+        <lane index="1" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    
+    <edge id="mondlane_WN_cen_in" from="N_WN_split" to="J_CENTER" numLanes="2" speed="13.89" priority="3">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+        <lane index="1" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    
+    <edge id="mondlane_WN_ramp" from="N_WN_split" to="N_WN_merge" numLanes="1" speed="11.11" priority="2">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    
+    <edge id="mondlane_WN_lat_1" from="N_W_lat_in" to="N_WN_merge" numLanes="1" speed="11.11" priority="2" sidewalkWidth="2.5" shape="-90.0,8.0 -28.0,8.0">
+        <lane index="0" disallow="pedestrian" width="3.5" />
+    </edge>
+
+    
+    <edge id="mondlane_WN_lat_in" from="N_WN_merge" to="J_CENTER" numLanes="1" speed="11.11" priority="2" sidewalkWidth="2.5" shape="-28.0,8.0 0.0,8.0">
+        <lane index="0" disallow="pedestrian" width="3.5" />
+    </edge>
+
+
+    
+    <edge id="mondlane_EN_cen_1" from="J_CENTER" to="N_EN_merge" numLanes="2" speed="13.89" priority="3">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+        <lane index="1" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    <edge id="mondlane_EN_cen_2" from="N_EN_merge" to="N_E_cen_out" numLanes="2" speed="13.89" priority="3">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+        <lane index="1" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    
+    <edge id="mondlane_EN_lat_bus" from="J_CENTER" to="N_EN_split" numLanes="1" speed="11.11" priority="2" sidewalkWidth="2.5" shape="0.0,8.0 28.0,8.0">
+        <lane index="0" disallow="pedestrian" width="3.5" />
+    </edge>
+
+    
+    <edge id="mondlane_EN_ramp" from="N_EN_split" to="N_EN_merge" numLanes="1" speed="11.11" priority="2">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    
+    <edge id="mondlane_EN_lat_end" from="N_EN_split" to="N_E_lat_out" numLanes="1" speed="11.11" priority="2" sidewalkWidth="2.5" shape="28.0,8.0 90.0,8.0">
+        <lane index="0" disallow="pedestrian" width="3.5" />
+    </edge>
+
+
+    
+    
+    
+
+    
+    <edge id="mondlane_ES_cen_1" from="N_E_cen_in" to="N_ES_split" numLanes="2" speed="13.89" priority="3">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+        <lane index="1" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    
+    <edge id="mondlane_ES_ramp" from="N_ES_split" to="N_ES_merge" numLanes="1" speed="11.11" priority="2">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    
+    <edge id="mondlane_ES_cen_in" from="N_ES_split" to="J_CENTER" numLanes="2" speed="13.89" priority="3">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+        <lane index="1" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    
+    <edge id="mondlane_ES_lat_1" from="N_E_lat_in" to="N_ES_merge" numLanes="1" speed="11.11" priority="2" sidewalkWidth="2.5" shape="90.0,-8.0 28.0,-8.0">
+        <lane index="0" disallow="pedestrian" width="3.5" />
+    </edge>
+
+    
+    <edge id="mondlane_ES_lat_in" from="N_ES_merge" to="J_CENTER" numLanes="1" speed="11.11" priority="2" sidewalkWidth="2.5" shape="28.0,-8.0 0.0,-8.0">
+        <lane index="0" disallow="pedestrian" width="3.5" />
+    </edge>
+
+
+    
+    <edge id="mondlane_WS_cen_1" from="J_CENTER" to="N_WS_merge" numLanes="2" speed="13.89" priority="3">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+        <lane index="1" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    <edge id="mondlane_WS_cen_2" from="N_WS_merge" to="N_W_cen_out" numLanes="2" speed="13.89" priority="3">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+        <lane index="1" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    
+    <edge id="mondlane_WS_lat_bus" from="J_CENTER" to="N_WS_split" numLanes="1" speed="11.11" priority="2" sidewalkWidth="2.5" shape="0.0,-8.0 -28.0,-8.0">
+        <lane index="0" disallow="pedestrian" width="3.5" />
+    </edge>
+
+    
+    <edge id="mondlane_WS_ramp" from="N_WS_split" to="N_WS_merge" numLanes="1" speed="11.11" priority="2">
+        <lane index="0" disallow="pedestrian bus taxi" width="3.2" />
+    </edge>
+
+    
+    <edge id="mondlane_WS_lat_end" from="N_WS_split" to="N_W_lat_out" numLanes="1" speed="11.11" priority="2" sidewalkWidth="2.5" shape="-28.0,-8.0 -90.0,-8.0">
+        <lane index="0" disallow="pedestrian" width="3.5" />
+    </edge>
+
+
+    
+    
+    
+    
+    
+    <edge id="allende_N_in" from="N_ALLENDE_N_in" to="J_CENTER" numLanes="2" speed="13.89" priority="3" sidewalkWidth="2.5" shape="0.0,70.0 0.0,0.0">
+        <lane index="0" disallow="pedestrian" width="3.2" />
+        <lane index="1" disallow="pedestrian" width="3.2" />
+    </edge>
+
+    
+    <edge id="allende_S_out" from="J_CENTER" to="N_ALLENDE_S_out" numLanes="2" speed="13.89" priority="3" sidewalkWidth="2.5" shape="0.0,0.0 0.0,-70.0">
+        <lane index="0" disallow="pedestrian" width="3.2" />
+        <lane index="1" disallow="pedestrian" width="3.2" />
+    </edge>
+
+</edges>

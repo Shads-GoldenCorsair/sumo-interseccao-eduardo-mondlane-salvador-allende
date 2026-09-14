@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Conexões e Passadeiras para a rede do cruzamento Avenida Eduardo Mondlane x Avenida Salvador Allende
+    - Salvador Allende é SENTIDO ÚNICO (Norte -> Sul), NÃO TEM DUAS FAIXAS OPOSTAS
+    - Passadeiras integradas mesmo antes do semáforo central (J_CENTER)
+    - Saídas e entradas de rampas mais próximas da passadeira
+    - Saída da faixa central sempre a partir da faixa 0 (mais próxima)
+-->
+<connections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/connections_file.xsd">
+
+    <!-- ==================================================================== -->
+    <!-- PASSADEIRAS PEDONAIS (LARGURA REDUZIDA PARA 2.0M)                     -->
+    <!-- ==================================================================== -->
+    <!-- Passadeira Oeste (Eduardo Mondlane - logo à entrada do semáforo) -->
+    <crossing node="J_CENTER" edges="mondlane_WN_cen_in mondlane_WN_lat_in mondlane_WS_cen_1 mondlane_WS_lat_bus" priority="1" width="2.0"/>
+
+    <!-- Passadeira Este (Eduardo Mondlane - logo à entrada do semáforo) -->
+    <crossing node="J_CENTER" edges="mondlane_ES_cen_in mondlane_ES_lat_in mondlane_EN_cen_1 mondlane_EN_lat_bus" priority="1" width="2.0"/>
+
+    <!-- Passadeira Norte (Salvador Allende - logo à entrada do semáforo) -->
+    <crossing node="J_CENTER" edges="allende_N_in" priority="1" width="2.0"/>
+
+    <!-- Passadeira Sul (Salvador Allende - logo à saída do semáforo) -->
+    <crossing node="J_CENTER" edges="allende_S_out" priority="1" width="2.0"/>
+
+
+    <!-- ==================================================================== -->
+    <!-- LIGAÇÕES NO CRUZAMENTO CENTRAL SEMAFÓRICO (J_CENTER)                 -->
+    <!-- ==================================================================== -->
+    <!-- Eduardo Mondlane Sentido Este (Vias Centrais) -->
+    <connection from="mondlane_WN_cen_in" to="mondlane_EN_cen_1"   fromLane="0" toLane="0"/>
+    <connection from="mondlane_WN_cen_in" to="mondlane_EN_cen_1"   fromLane="1" toLane="1"/>
+    <!-- Viragem à direita para Salvador Allende Sul da Central -->
+    <connection from="mondlane_WN_cen_in" to="allende_S_out"       fromLane="1" toLane="2"/>
+
+    <!-- Eduardo Mondlane Sentido Este (Faixa Lateral Norte) -->
+    <!-- mondlane_WN_lat_in: NÃO PODE de forma alguma virar à direita; APENAS segue em frente -->
+    <connection from="mondlane_WN_lat_in" to="mondlane_EN_lat_bus" fromLane="1" toLane="1"/>
+
+    <!-- Eduardo Mondlane Sentido Oeste (Vias Centrais) -->
+    <connection from="mondlane_ES_cen_in" to="mondlane_WS_cen_1"   fromLane="0" toLane="0"/>
+    <connection from="mondlane_ES_cen_in" to="mondlane_WS_cen_1"   fromLane="1" toLane="1"/>
+    <!-- Viragem à esquerda para Salvador Allende Sul -->
+    <connection from="mondlane_ES_cen_in" to="allende_S_out"       fromLane="0" toLane="1"/>
+
+    <!-- Eduardo Mondlane Sentido Oeste (Faixa Lateral Sul) -->
+    <!-- mondlane_ES_lat_in: PODE virar para Allende Sul OU seguir em frente -->
+    <connection from="mondlane_ES_lat_in" to="mondlane_WS_lat_bus" fromLane="1" toLane="1"/>
+    <connection from="mondlane_ES_lat_in" to="allende_S_out"       fromLane="1" toLane="1"/>
+
+    <!-- Salvador Allende Sentido Sul (Norte -> Sul, sentido único) -->
+    <!-- Seguir em frente para Salvador Allende Sul -->
+    <connection from="allende_N_in" to="allende_S_out"       fromLane="1" toLane="1"/>
+    <connection from="allende_N_in" to="allende_S_out"       fromLane="2" toLane="2"/>
+    <!-- Viragem à esquerda para Eduardo Mondlane Este: ENTRA NA LATERAL (e não na central) -->
+    <connection from="allende_N_in" to="mondlane_EN_lat_bus" fromLane="1" toLane="1"/>
+    <!-- Viragem à direita para Eduardo Mondlane Oeste: ENTRA NA LATERAL (e não na central) -->
+    <connection from="allende_N_in" to="mondlane_WS_lat_bus" fromLane="2" toLane="1"/>
+
+
+    <!-- ==================================================================== -->
+    <!-- RAMPAS DE SAÍDA E ENTRADA (MAIS PRÓXIMAS DA PASSADEIRA)              -->
+    <!-- ==================================================================== -->
+    <!-- Lado Oeste: Saída da Central Norte para a Lateral Norte (da faixa 0) -->
+    <connection from="mondlane_WN_cen_1" to="mondlane_WN_cen_in" fromLane="0" toLane="0"/>
+    <connection from="mondlane_WN_cen_1" to="mondlane_WN_cen_in" fromLane="1" toLane="1"/>
+    <connection from="mondlane_WN_cen_1" to="mondlane_WN_ramp"   fromLane="0" toLane="0"/>
+
+    <!-- Lado Oeste: Junção da Rampa de Saída na Lateral Norte -->
+    <connection from="mondlane_WN_lat_1" to="mondlane_WN_lat_in" fromLane="1" toLane="1"/>
+    <connection from="mondlane_WN_ramp"  to="mondlane_WN_lat_in" fromLane="0" toLane="1"/>
+
+    <!-- Lado Este: Saída da Lateral Norte para Rampa de Entrada (após paragem BUS) -->
+    <connection from="mondlane_EN_lat_bus" to="mondlane_EN_lat_end" fromLane="1" toLane="1"/>
+    <connection from="mondlane_EN_lat_bus" to="mondlane_EN_ramp"    fromLane="1" toLane="0"/>
+
+    <!-- Lado Este: Junção da Rampa de Entrada na Central Norte (entra na faixa 0) -->
+    <connection from="mondlane_EN_cen_1" to="mondlane_EN_cen_2" fromLane="0" toLane="0"/>
+    <connection from="mondlane_EN_cen_1" to="mondlane_EN_cen_2" fromLane="1" toLane="1"/>
+    <connection from="mondlane_EN_ramp"  to="mondlane_EN_cen_2" fromLane="0" toLane="0"/>
+
+
+    <!-- Lado Este: Saída da Central Sul para a Lateral Sul (da faixa 0) -->
+    <connection from="mondlane_ES_cen_1" to="mondlane_ES_cen_in" fromLane="0" toLane="0"/>
+    <connection from="mondlane_ES_cen_1" to="mondlane_ES_cen_in" fromLane="1" toLane="1"/>
+    <connection from="mondlane_ES_cen_1" to="mondlane_ES_ramp"   fromLane="0" toLane="0"/>
+
+    <!-- Lado Este: Junção da Rampa de Saída na Lateral Sul -->
+    <connection from="mondlane_ES_lat_1" to="mondlane_ES_lat_in" fromLane="1" toLane="1"/>
+    <connection from="mondlane_ES_ramp"  to="mondlane_ES_lat_in" fromLane="0" toLane="1"/>
+
+    <!-- Lado Oeste: Saída da Lateral Sul para Rampa de Entrada (após paragem BUS) -->
+    <connection from="mondlane_WS_lat_bus" to="mondlane_WS_lat_end" fromLane="1" toLane="1"/>
+    <connection from="mondlane_WS_lat_bus" to="mondlane_WS_ramp"    fromLane="1" toLane="0"/>
+
+    <!-- Lado Oeste: Junção da Rampa de Entrada na Central Sul (entra na faixa 0) -->
+    <connection from="mondlane_WS_cen_1" to="mondlane_WS_cen_2" fromLane="0" toLane="0"/>
+    <connection from="mondlane_WS_cen_1" to="mondlane_WS_cen_2" fromLane="1" toLane="1"/>
+    <connection from="mondlane_WS_ramp"  to="mondlane_WS_cen_2" fromLane="0" toLane="0"/>
+
+</connections>

@@ -1,19 +1,18 @@
 """
 Ambiente SUMO/TraCI para o agente DQN de controlo semaforico.
 
-Interseccao real (georreferenciada): Avenida Eduardo Mondlane com Avenida
-Salvador Allende, Maputo. Tem 3 aproximacoes, nao 4, porque a Avenida
-Eduardo Mondlane, neste troco, e um par de vias de sentido unico (ver
-PROGRESSO.md, seccao 2026-09-13, Fase 0, para o detalhe desta decisao,
-tomada em conjunto com o autor).
+Interseccao adaptada de uma rede de referencia (Desktop/antigravity sumo/,
+conducao a esquerda nativa de Mocambique), ver PROGRESSO.md (sessao 2,
+"adaptacao da rede antigravity sumo, tomada 2") para o historico completo
+desta mudanca. Tem 5 aproximacoes: Eduardo Mondlane com faixa central (so
+carros) e faixa lateral (chapas/autocarros/carros) em cada sentido, mais
+Salvador Allende (sentido unico).
 
-Espaco de estados: vector de 17 valores, um por FAIXA (nao por via inteira,
-decisao do autor: a Avenida Eduardo Mondlane tem uma faixa de acesso local
-separada das faixas centrais por um separador fisico com poucas aberturas,
-ver PROGRESSO.md), mais a fase:
+Espaco de estados: vector de 17 valores, um por FAIXA (nao por via inteira):
     [fila_faixa_1, ..., fila_faixa_8, espera_faixa_1, ..., espera_faixa_8, fase_actual]
-As 8 faixas sao, por ordem: EM1 (3 faixas), EM2 (3 faixas), SA (2 faixas),
-ver FAIXAS_ENTRADA abaixo para a ordem exacta e os IDs nativos.
+As 8 faixas sao, por ordem: EM central Este (2), EM lateral Este (1),
+EM central Oeste (2), EM lateral Oeste (1), SA (2), ver ARESTAS_ENTRADA e
+FAIXAS_ENTRADA abaixo para a ordem exacta e os IDs nativos.
 Espaco de accoes: discreto, 2 valores
     0 = manter a fase actual
     1 = mudar de fase
@@ -31,13 +30,14 @@ sys.path.append(os.path.join(os.environ["SUMO_HOME"], "tools"))
 
 import traci  # noqa: E402
 
-# Arestas de entrada da interseccao real (IDs nativos do OpenStreetMap,
-# gerados pelo netconvert). Ver routes/routes.rou.xml para o detalhe dos
-# movimentos permitidos em cada uma.
+# Arestas de entrada da interseccao (IDs da rede adaptada, ver
+# routes/routes.rou.xml para o detalhe dos movimentos de cada uma).
 ARESTAS_ENTRADA = {
-    "EM1": "552827135#0",
-    "EM2": "725127419#1",
-    "SA":  "24769111#9",
+    "EM_central_E": "mondlane_WN_cen_in",
+    "EM_lateral_E": "mondlane_WN_lat_in",
+    "EM_central_O": "mondlane_ES_cen_in",
+    "EM_lateral_O": "mondlane_ES_lat_in",
+    "SA":           "allende_N_in",
 }
 
 CAMINHO_NET = os.path.join(os.path.dirname(__file__), "..", "net", "eduardo_mondlane_salvador_allende.net.xml")
@@ -65,15 +65,23 @@ FAIXAS_ENTRADA = [
     for faixa in _faixas_de_veiculos(CAMINHO_NET, aresta)
 ]
 
-ID_SEMAFORO = "cluster_12168401392_13673178841_13673178842_1783252720"
+ID_SEMAFORO = "TL_MAIN"
 
-# Indices das fases verdes no tlLogic (net/eduardo_mondlane_salvador_allende.net.xml).
-# 0 = verde EM (42s), 1 = amarelo EM (3s), 2 = verde SA (42s), 3 = amarelo SA (3s).
+# Indices das fases no tlLogic (net/eduardo_mondlane_salvador_allende.net.xml).
+# 0=verde EM(40s) 1=amarelo EM(3s) 2=vermelho geral(2s)
+# 3=verde SA(40s) 4=amarelo SA(3s) 5=vermelho geral(2s)
+# O vermelho geral (clareamento) foi acrescentado apos um teste ter
+# detectado uma colisao real sem essa margem de seguranca entre as fases
+# (ver PROGRESSO.md); o verde de cada lado desceu de 42s para 40s para
+# manter a duracao total do ciclo igual (90s).
 FASE_VERDE_EM = 0
 FASE_AMARELA_EM = 1
-FASE_VERDE_SA = 2
-FASE_AMARELA_SA = 3
+FASE_VERMELHO_EM = 2
+FASE_VERDE_SA = 3
+FASE_AMARELA_SA = 4
+FASE_VERMELHO_SA = 5
 DURACAO_AMARELO = 3
+DURACAO_VERMELHO_GERAL = 2
 
 PENALIZACAO_MUDANCA_FASE = 5.0
 
@@ -127,12 +135,19 @@ class AmbienteSumo:
         mudou_fase = False
 
         if accao == 1 and fase_actual in (FASE_VERDE_EM, FASE_VERDE_SA):
-            # Entra na fase amarela correspondente antes de mudar de verde.
-            fase_amarela = FASE_AMARELA_EM if fase_actual == FASE_VERDE_EM else FASE_AMARELA_SA
+            # Entra na fase amarela e depois no vermelho geral de
+            # clareamento, antes de mudar para o verde do outro lado.
+            if fase_actual == FASE_VERDE_EM:
+                fase_amarela, fase_vermelho = FASE_AMARELA_EM, FASE_VERMELHO_EM
+            else:
+                fase_amarela, fase_vermelho = FASE_AMARELA_SA, FASE_VERMELHO_SA
             traci.trafficlight.setPhase(ID_SEMAFORO, fase_amarela)
             for _ in range(DURACAO_AMARELO):
                 traci.simulationStep()
-            restante = INTERVALO_DECISAO - DURACAO_AMARELO
+            traci.trafficlight.setPhase(ID_SEMAFORO, fase_vermelho)
+            for _ in range(DURACAO_VERMELHO_GERAL):
+                traci.simulationStep()
+            restante = INTERVALO_DECISAO - DURACAO_AMARELO - DURACAO_VERMELHO_GERAL
         else:
             restante = INTERVALO_DECISAO
 
@@ -149,10 +164,10 @@ class AmbienteSumo:
         filas = [traci.lane.getLastStepHaltingNumber(f) for f in FAIXAS_ENTRADA]
         esperas = [traci.lane.getWaitingTime(f) for f in FAIXAS_ENTRADA]
         fase = traci.trafficlight.getPhase(ID_SEMAFORO)
-        # Normaliza a fase para 0 (grupo EM) ou 1 (grupo SA), ignorando o
-        # sub-estado amarelo transitorio, para manter o valor coerente com
-        # o significado de "fase actual" usado na formulacao do estado.
-        fase_normalizada = 0 if fase in (FASE_VERDE_EM, FASE_AMARELA_EM) else 1
+        # Normaliza a fase para 0 (grupo EM) ou 1 (grupo SA), ignorando os
+        # sub-estados amarelo/vermelho geral transitorios, para manter o
+        # valor coerente com o significado de "fase actual" no estado.
+        fase_normalizada = 0 if fase in (FASE_VERDE_EM, FASE_AMARELA_EM, FASE_VERMELHO_EM) else 1
         return filas + esperas + [fase_normalizada]
 
     def _calcular_recompensa(self, mudou_fase):

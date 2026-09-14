@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Nós para a rede do cruzamento Avenida Eduardo Mondlane x Avenida Salvador Allende (Maputo, Moçambique)
+    - Salvador Allende é SENTIDO ÚNICO (Norte -> Sul), NÃO tem duas faixas opostas
+    - Eduardo Mondlane tem dois sentidos opostos separados por linha contínua no eixo Y = 0.0 (Zero Gap)
+    - Passadeiras integradas mesmo antes do semáforo central (J_CENTER)
+    - Saídas e entradas de rampas mais próximas da intersecção/passadeira
+-->
+<nodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/nodes_file.xsd">
+
+    <!-- Cruzamento Central Semafórico com Passadeiras Integradas -->
+    <node id="J_CENTER" x="0.0" y="0.0" type="traffic_light" tl="TL_MAIN"/>
+
+    <!-- ==================================================================== -->
+    <!-- LADO OESTE DA AVENIDA EDUARDO MONDLANE (X < 0)                       -->
+    <!-- ==================================================================== -->
+    <!-- Extremidade Oeste -->
+    <node id="N_W_cen_in"   x="-90.0" y="0.0"  type="priority"/>
+    <node id="N_W_lat_in"   x="-90.0" y="8.0"  type="priority"/>
+    <node id="N_W_cen_out"  x="-90.0" y="0.0"  type="priority"/>
+    <node id="N_W_lat_out"  x="-90.0" y="-8.0" type="priority"/>
+
+    <!-- Rampa de Saída da Central Norte para a Lateral Norte (Sentido Este) - MAIS PRÓXIMA -->
+    <node id="N_WN_split"   x="-45.0" y="0.0"  type="priority"/>
+    <node id="N_WN_merge"   x="-28.0" y="8.0"  type="priority"/>
+
+    <!-- Rampa de Entrada da Lateral Sul para a Central Sul (Sentido Oeste) - MAIS PRÓXIMA DEPOIS DA PASSADEIRA -->
+    <node id="N_WS_split"   x="-28.0" y="-8.0" type="priority"/>
+    <node id="N_WS_merge"   x="-45.0" y="0.0"  type="priority"/>
+
+
+    <!-- ==================================================================== -->
+    <!-- LADO ESTE DA AVENIDA EDUARDO MONDLANE (X > 0)                        -->
+    <!-- ==================================================================== -->
+    <!-- Rampa de Entrada da Lateral Norte para a Central Norte (Sentido Este) - MAIS PRÓXIMA DEPOIS DA PASSADEIRA -->
+    <node id="N_EN_split"   x="28.0"  y="8.0"  type="priority"/>
+    <node id="N_EN_merge"   x="45.0"  y="0.0"  type="priority"/>
+
+    <!-- Rampa de Saída da Central Sul para a Lateral Sul (Sentido Oeste) - MAIS PRÓXIMA -->
+    <node id="N_ES_split"   x="45.0"  y="0.0"  type="priority"/>
+    <node id="N_ES_merge"   x="28.0"  y="-8.0" type="priority"/>
+
+    <!-- Extremidade Este -->
+    <node id="N_E_cen_out"  x="90.0"  y="0.0"  type="priority"/>
+    <node id="N_E_lat_out"  x="90.0"  y="8.0"  type="priority"/>
+    <node id="N_E_cen_in"   x="90.0"  y="0.0"  type="priority"/>
+    <node id="N_E_lat_in"   x="90.0"  y="-8.0" type="priority"/>
+
+
+    <!-- ==================================================================== -->
+    <!-- AVENIDA SALVADOR ALLENDE (SENTIDO ÚNICO: NORTE -> SUL)              -->
+    <!-- ==================================================================== -->
+    <node id="N_ALLENDE_N_in"  x="0.0" y="70.0"  type="priority"/>
+    <node id="N_ALLENDE_S_out" x="0.0" y="-70.0" type="priority"/>
+
+</nodes>

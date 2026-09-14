@@ -1,48 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Definicao das rotas possiveis na interseccao real (georreferenciada).
+  Ficheiro de referencia (documentacao) das rotas possiveis na interseccao,
+  sem fluxos de trafego. Ver demanda_pico.rou.xml / demanda_baixo_fluxo.rou.xml
+  para as rotas com procura activa (identicas as daqui, mais os <flow>).
 
-  A interseccao real tem apenas 3 aproximacoes, nao 4: a Avenida Eduardo
-  Mondlane, neste troco, e um par de vias de sentido unico (nao uma unica
-  via bidireccional), pelo que aparece como dois ramos distintos (EM1, EM2).
-  A Avenida Salvador Allende e a terceira aproximacao (SA), de sentido
-  unico com 2 faixas (corrigido apos verificacao com imagem de satelite,
-  o OSM nao tinha a tag "lanes" nesta via, ver PROGRESSO.md).
-
-  Os IDs de aresta sao os gerados pelo netconvert a partir do OpenStreetMap
-  (net/eduardo_mondlane_salvador_allende.net.xml), nao nomes descritivos,
-  porque sao os identificadores nativos da via no OSM.
-
-  Movimentos possiveis (confirmados pelas ligacoes reais calculadas pelo
-  netconvert; a viragem em U entre EM1 e EM2 foi removida explicitamente
-  por nao ser fisicamente possivel nesta interseccao real, confirmado por
-  imagem de satelite, ver net/osm_real/remover_conexoes.con.xml):
-    EM1_in -> EM1_out (recto), EM1_in -> SA_out  (esquerda)
-    EM2_in -> EM2_out (recto), EM2_in -> SA_out  (direita)
-    SA_in  -> SA_out  (recto), SA_in  -> EM1_out (direita), SA_in -> EM2_out (esquerda)
+  Rede desde 2026-09-14 (sessao 2): adaptada de Desktop/antigravity sumo/,
+  condução a esquerda nativa (Mocambique). Ver PROGRESSO.md para o
+  historico completo. Substitui a rede georreferenciada anterior por uma
+  rede esquematica adaptada, que resolveu problemas persistentes de
+  passadeiras/baia de autocarro que a rede georreferenciada nao conseguia.
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
 
-    <!-- Tipos de veiculos -->
-    <vType id="ligeiro" vClass="passenger" length="4.5" maxSpeed="16.7" accel="2.6" decel="4.5" sigma="0.5" color="0.6,0.6,0.6"/>
-    <vType id="chapa"   vClass="taxi"      length="5.5" maxSpeed="14.0" accel="2.0" decel="4.0" sigma="0.6" color="0.9,0.7,0.1"/>
-    <vType id="autocarro" vClass="bus"     length="10.0" maxSpeed="12.0" accel="1.2" decel="3.5" sigma="0.4" color="0.1,0.5,0.2"/>
-    <vType id="pesado"  vClass="truck"     length="8.0" maxSpeed="12.0" accel="1.3" decel="3.5" sigma="0.5" color="0.3,0.3,0.3"/>
-
-    <!-- A partir de Eduardo Mondlane, ramo 1 (via 552827135#0) -->
-    <route id="EM1_straight" edges="552827135#0 552827132"/>
-    <route id="EM1_left"     edges="552827135#0 24769111#11"/>
-
-    <!-- A partir de Eduardo Mondlane, ramo 2 (via 725127419#1). A saida
-         725127419#3 foi dividida em 3 segmentos (a/b/c) para dar lugar a
-         baia de autocarro (faixa extra so em 725127419#3b), ver
-         PROGRESSO.md. -->
-    <route id="EM2_straight" edges="725127419#1 725127419#3a 725127419#3b 725127419#3c"/>
-    <route id="EM2_right"    edges="725127419#1 24769111#11"/>
-
-    <!-- A partir de Salvador Allende (via 24769111#9) -->
-    <route id="SA_straight" edges="24769111#9 24769111#11"/>
-    <route id="SA_right"    edges="24769111#9 552827132"/>
-    <route id="SA_left"     edges="24769111#9 725127419#3a 725127419#3b 725127419#3c"/>
+    <route id="r_mondlane_E_cen" edges="mondlane_WN_cen_1 mondlane_WN_cen_in mondlane_EN_cen_1 mondlane_EN_cen_2"/>
+    <route id="r_mondlane_W_cen" edges="mondlane_ES_cen_1 mondlane_ES_cen_in mondlane_WS_cen_1 mondlane_WS_cen_2"/>
+    <route id="r_mondlane_E_lat" edges="mondlane_WN_lat_1 mondlane_WN_lat_in mondlane_EN_lat_bus mondlane_EN_lat_end"/>
+    <route id="r_mondlane_W_lat" edges="mondlane_ES_lat_1 mondlane_ES_lat_in mondlane_WS_lat_bus mondlane_WS_lat_end"/>
+    <route id="r_diverge_W" edges="mondlane_WN_cen_1 mondlane_WN_ramp mondlane_WN_lat_in mondlane_EN_lat_bus mondlane_EN_lat_end"/>
+    <route id="r_diverge_E" edges="mondlane_ES_cen_1 mondlane_ES_ramp mondlane_ES_lat_in mondlane_WS_lat_bus mondlane_WS_lat_end"/>
+    <route id="r_merge_E" edges="mondlane_WN_lat_1 mondlane_WN_lat_in mondlane_EN_lat_bus mondlane_EN_ramp mondlane_EN_cen_2"/>
+    <route id="r_merge_W" edges="mondlane_ES_lat_1 mondlane_ES_lat_in mondlane_WS_lat_bus mondlane_WS_ramp mondlane_WS_cen_2"/>
+    <route id="r_allende_S_straight" edges="allende_N_in allende_S_out"/>
+    <route id="r_allende_S_turn_E_lat" edges="allende_N_in mondlane_EN_lat_bus mondlane_EN_lat_end"/>
+    <route id="r_allende_S_turn_E_to_cen" edges="allende_N_in mondlane_EN_lat_bus mondlane_EN_ramp mondlane_EN_cen_2"/>
+    <route id="r_allende_S_turn_W_lat" edges="allende_N_in mondlane_WS_lat_bus mondlane_WS_lat_end"/>
+    <route id="r_allende_S_turn_W_to_cen" edges="allende_N_in mondlane_WS_lat_bus mondlane_WS_ramp mondlane_WS_cen_2"/>
+    <route id="r_mondlane_turn_allende_E" edges="mondlane_WN_cen_1 mondlane_WN_cen_in allende_S_out"/>
+    <route id="r_mondlane_turn_allende_W" edges="mondlane_ES_cen_1 mondlane_ES_cen_in allende_S_out"/>
+    <route id="r_mondlane_turn_allende_lat_E" edges="mondlane_ES_lat_1 mondlane_ES_lat_in allende_S_out"/>
 
 </routes>

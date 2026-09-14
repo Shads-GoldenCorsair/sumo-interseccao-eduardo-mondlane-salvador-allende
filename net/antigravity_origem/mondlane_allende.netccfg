@@ -1,0 +1,28 @@
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <input>
+        <node-files value="mondlane_allende.nod.xml" />
+        <edge-files value="mondlane_allende.edg.xml" />
+        <connection-files value="mondlane_allende.con.xml" />
+        <tllogic-files value="mondlane_allende.tll.xml" />
+    </input>
+
+    <output>
+        <output-file value="mondlane_allende.net.xml" />
+    </output>
+
+    <processing>
+        <lefthand value="true" />
+        <junctions.corner-detail value="0" />
+        <walkingareas value="true" />
+    </processing>
+
+    <pedestrian>
+        <crossings.guess value="true" />
+    </pedestrian>
+
+    <report>
+        <verbose value="true" />
+    </report>
+
+</configuration>
