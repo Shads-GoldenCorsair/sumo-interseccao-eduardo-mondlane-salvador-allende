@@ -23,6 +23,7 @@ menos uma penalizacao de 5.0 se a accao mudou de fase.
 
 import os
 import sys
+import xml.etree.ElementTree as ET
 
 if "SUMO_HOME" not in os.environ:
     raise EnvironmentError("Variavel SUMO_HOME nao definida. Configura o SUMO antes de correr o agente.")
@@ -39,17 +40,29 @@ ARESTAS_ENTRADA = {
     "SA":  "24769111#9",
 }
 
-# Numero de faixas de cada aresta de entrada (net/eduardo_mondlane_salvador_allende.net.xml).
-NUM_FAIXAS = {"552827135#0": 3, "725127419#1": 3, "24769111#9": 2}
+CAMINHO_NET = os.path.join(os.path.dirname(__file__), "..", "net", "eduardo_mondlane_salvador_allende.net.xml")
+
+
+def _faixas_de_veiculos(caminho_net, aresta_id):
+    """Devolve os IDs das faixas de uma aresta que permitem veiculos
+    motorizados, por ordem de indice. Exclui faixas so de peoes (a rede tem
+    passeios com faixa propria em Eduardo Mondlane, ver PROGRESSO.md) em vez
+    de assumir um numero de faixas fixo, para nao partir se a rede voltar a
+    ser regerada com uma disposicao de faixas diferente."""
+    arvore = ET.parse(caminho_net)
+    aresta = arvore.getroot().find(f".//edge[@id='{aresta_id}']")
+    faixas = [l for l in aresta.findall("lane") if l.get("allow") != "pedestrian"]
+    return [l.get("id") for l in sorted(faixas, key=lambda l: int(l.get("index")))]
+
 
 # Faixas de cada aresta de entrada, por ordem (indice 0 = mais a direita no
 # sentido de marcha). O estado observa por faixa, nao por via inteira,
 # porque a Avenida Eduardo Mondlane tem uma faixa de acesso local separada
 # das centrais por um separador fisico (ver PROGRESSO.md).
 FAIXAS_ENTRADA = [
-    f"{aresta}_{i}"
+    faixa
     for aresta in ARESTAS_ENTRADA.values()
-    for i in range(NUM_FAIXAS[aresta])
+    for faixa in _faixas_de_veiculos(CAMINHO_NET, aresta)
 ]
 
 ID_SEMAFORO = "cluster_12168401392_13673178841_13673178842_1783252720"

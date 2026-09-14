@@ -408,7 +408,103 @@ de 17 valores e a rede com restrição de faixas.
 `treino_colab.ipynb`: `EPISODIOS` por omissão passou de 100 para **20**,
 para o primeiro teste do autor ser mais curto (confirmado explicitamente).
 
-**Ainda por verificar/decidir:**
+## 2026-09-14 — Sessão 2: passadeiras reais na interseccao
+
+Novo rabisco do autor mostrou dois elementos adicionais: baía de autocarro
+(faixa diagonal separada para parar) e passadeiras nas 4 esquinas do
+cruzamento. Confirmado com o autor: modelar a baía como faixa física extra,
+e adicionar as passadeiras com fluxo de peões (podem afectar o trânsito).
+
+**Passadeiras:** processo com bastante tentativa e erro documentado aqui
+para referência futura:
+- `--crossings.guess` do `netconvert`, sozinho, não gerou nenhuma
+  passadeira nesta zona, apesar de haver passeios (dados reais do OSM,
+  tag `sidewalk`). Descoberta a causa depois de testes isolados numa rede
+  minúscula: as vias de sentido único de Eduardo Mondlane só tinham
+  passeio de um lado (`sidewalk=left`), e o gerador de passadeiras precisa
+  de passeio dos dois lados para conseguir ligar uma travessia.
+- Corrigido com `--osm.oneway-reverse-sidewalk` (força passeio dos dois
+  lados em vias de sentido único) + `--sidewalks.guess.from-permissions` +
+  `--crossings.guess.speed-threshold 100` (o limite por omissão excluía
+  vias mais rápidas). Resultado: **6 passadeiras reais** no nosso
+  cruzamento, uma por cada aresta de entrada e saída.
+- Efeito colateral a gerir: os passeios novos inseriram-se como a faixa de
+  índice 0 em cada aresta de Eduardo Mondlane, empurrando as faixas de
+  veículos de [0,1,2] para [1,2,3]. Isto partia várias coisas que
+  assumiam índices fixos:
+  - A restrição de faixa (separador físico, ver entrada anterior) tinha
+    de ser reaplicada aos novos índices (faixa 3 = exterior, faixa 2 =
+    adjacente).
+  - `net/paragens.add.xml`: a paragem de autocarro apontava para a faixa
+    errada (`_0`, agora passeio), corrigido para `_3` (faixa exterior).
+  - `agente_dqn/sumo_env.py`: `FAIXAS_ENTRADA` deixou de assumir um
+    número de faixas fixo por aresta (`NUM_FAIXAS`), passou a detectar
+    dinamicamente, a partir do próprio ficheiro de rede, quais as faixas
+    que permitem veículos (excluindo passeios). Mais robusto a futuras
+    regeneracoes da rede.
+- **Nao resolvido, aceite como esta:** a viragem em U entre os dois
+  ramos de Eduardo Mondlane (que já tinha sido removida na correcção
+  anterior) voltou a aparecer na rede depois de activar o processamento
+  de peões, mesmo com o mesmo ficheiro de conexoes a pedir a sua remoção.
+  Não se percebeu a causa exacta (possivelmente uma interaccao entre o
+  processamento de passeios e a reconstrucao de ligacoes). **Sem impacto
+  prático**: nenhuma rota do projecto usa esse movimento, os veiculos
+  simulados nunca o executam, so fica presente na topologia da rede sem
+  ser usado.
+
+**tlLogic reconstruido** com as passadeiras incluídas: os peões de cada
+aproximacao ficam com sinal verde durante a fase em que essa aproximacao
+de veiculos esta vermelha (raciocinio verificado contra as ligacoes reais
+calculadas pelo netconvert), e vermelho durante as duas fases amarelas
+(transicao de seguranca).
+
+Validado com `sumo -c` em ambos os cenarios (pico teve 1 aviso de travagem
+de emergencia, aceitavel, completou a simulacao). Baseline remedido:
+**11,2s pico, 9,9s baixo fluxo**.
+
+**Decisão do autor:** fluxo de peões só em Eduardo Mondlane por agora
+(confirmado como funcional, ver abaixo); baía de autocarro física
+implementar já (tentada, ver resultado abaixo).
+
+**Fluxo de peões implementado:** testado primeiro isoladamente (uma
+pessoa a andar de `552827135#0` para `725127419#3`, atravessando o
+cruzamento todo através da infra-estrutura de passadeiras), confirmado
+sem erros. Adicionados `<personFlow>` a `demanda_pico.rou.xml`
+(40 pessoas/hora em cada sentido) e `demanda_baixo_fluxo.rou.xml`
+(8 pessoas/hora), cruzando entre os lados de EM1 e EM2. Salvador Allende
+fica de fora por agora (rede de passeios incompleta ali). Validado:
+80 pessoas inseridas no pico, 16 no baixo fluxo, sem erros de
+encaminhamento.
+
+**Baía de autocarro (faixa física): tentativa falhada, documentada.**
+Exportada a rede para XML plano (`nodes`/`edges`/`connections`/`tllogic`
+separados) e usado o mecanismo nativo do SUMO para faixas que nascem e
+desaparecem (`<split>` no ficheiro de arestas), na posição exacta da
+paragem (1,4-26,4m). O `netconvert` recusou reconstruir a rede a partir
+daí, com o erro "Edge does not touch node", em várias tentativas
+(incluindo remover as definições de faixa conflituosas). A causa mais
+provável: o `<split>` implicitamente subdivide a aresta em vários IDs
+internos, e outros ficheiros da rede (o semáforo, as conexões) já
+referenciam o ID original da aresta inteira, criando uma inconsistência
+que não se resolveu com o tempo disponível.
+
+**Decisão do autor perante o impasse:** usar o atributo `parking="true"`
+no `<stop>` do autocarro em vez da faixa física — o SUMO deixa o trânsito
+ultrapassar um veículo parado com este atributo, produzindo o efeito
+prático real de uma baía (não bloqueia quem vem atrás) sem precisar de
+desenhar a geometria da faixa. Aplicado em `demanda_pico.rou.xml`.
+
+Rede final desta correcção volta à versão v4 (passadeiras, faixas
+correctas, sem a tentativa de baía física). Validado com `sumo -c` em
+ambos os cenários, sem erros. Baseline remedido: **11,3s pico, 9,9s baixo
+fluxo**.
+
+**Teste de fumo confirmado** (3 episódios, baixo fluxo, já com passadeiras
+e peões): recompensa -359.0, -85.0, -64.0, melhora de forma consistente.
+
+**Ainda por fazer, explicitamente pendente:**
+- Fluxo de peões em Salvador Allende (pendente a rede de passeios ali
+  ficar completa).
 - Validar o resume end-to-end com uma interrupção real (kill do processo,
   não só teste unitário das funções de guardar/carregar), idealmente numa
   máquina menos ocupada ou já no próprio Colab.

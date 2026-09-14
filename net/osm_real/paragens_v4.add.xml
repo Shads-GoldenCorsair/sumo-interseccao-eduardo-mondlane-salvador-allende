@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-09-14T10:39:27.628095+02:00 by Eclipse SUMO netconvert 1.27.1
+<netconvertConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <input>
+        <connection-files value="remover_conexoes.con.xml"/>
+        <type-files value="C:\Program Files (x86)\Eclipse\Sumo\data\typemap\osmNetconvert.typ.xml,C:\Program Files (x86)\Eclipse\Sumo\data\typemap\osmNetconvertPedestrians.typ.xml"/>
+        <osm-files value="cruzamento_bbox2.osm.xml"/>
+    </input>
+
+    <output>
+        <output-file value="cruzamento_v4.net.xml"/>
+        <output.street-names value="true"/>
+        <ptstop-output value="paragens_v4.add.xml"/>
+    </output>
+
+    <projection>
+        <proj.utm value="true"/>
+    </projection>
+
+    <processing>
+        <geometry.remove value="true"/>
+        <roundabouts.guess value="true"/>
+    </processing>
+
+    <tls_building>
+        <tls.discard-simple value="true"/>
+        <tls.set value="cluster_12168401392_13673178841_13673178842_1783252720"/>
+        <tls.join value="true"/>
+        <tls.guess-signals value="true"/>
+        <tls.default-type value="static"/>
+    </tls_building>
+
+    <ramp_guessing>
+        <ramps.guess value="true"/>
+    </ramp_guessing>
+
+    <junctions>
+        <no-turnarounds.tls value="true"/>
+        <junctions.join value="true"/>
+        <junctions.join-dist value="30"/>
+    </junctions>
+
+    <pedestrian>
+        <sidewalks.guess value="true"/>
+    </pedestrian>
+
+    <formats>
+        <osm.sidewalks value="true"/>
+    </formats>
+
+</netconvertConfiguration>
+-->
+
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+    <busStop id="-1675593954" name="Maternidade" lane="-547254026#0_1" startPos="0.00" endPos="19.70" friendlyPos="true" lines="406i X13i X15i X11i X10i 403i X12i X19v X19i"/>
+    <busStop id="-5273518592" name="3 de Fevereiro" lane="-174130756_1" startPos="94.55" endPos="119.55" friendlyPos="true" lines="404v X38v X39v 215v 406v 221v 222v X13v X15v X11v X10v C1v 403v X12v X19v"/>
+    <busStop id="-5280821133" name="Maternidade" lane="-4360414#3_1" startPos="0.00" endPos="15.00" friendlyPos="true"/>
+    <busStop id="-5280821135" name="Polana" lane="-725127387#0_0" startPos="38.93" endPos="53.93" friendlyPos="true"/>
+    <busStop id="-5280897268" name="Mangueira" lane="-547254015_0" startPos="0.00" endPos="15.96" friendlyPos="true" lines="222i 404i 215i 406i 221i X13i X15i X11i X10i 403i X12i">
+        <access lane="-255997801_0" pos="0.00" length="27.20" friendlyPos="1"/>
+        <access lane="-258089111_0" pos="0.00" length="20.87" friendlyPos="1"/>
+        <access lane="155124254#0_0" pos="0.00" length="17.65" friendlyPos="1"/>
+        <access lane="255997801_0" pos="85.26" length="15.53" friendlyPos="1"/>
+        <access lane="258089111_0" pos="41.67" length="25.45" friendlyPos="1"/>
+    </busStop>
+    <busStop id="-5282381463" name="Esquina" lane="-563922723#0_1" startPos="77.94" endPos="102.94" friendlyPos="true" lines="X19v"/>
+    <busStop id="-5282381465" name="Hospital" lane="-563922724_1" startPos="4.32" endPos="29.32" friendlyPos="true" lines="X19v"/>
+    <busStop id="-5287517830" name="Esquina 24 de Julho" lane="-547729075_1" startPos="0.00" endPos="25.00" friendlyPos="true" lines="X29v 302v 307v X28v 305v X32v 404v X38v X39v 215v 406v 221v 222v X13v X15v X11v X10v C1i"/>
+    <busStop id="-5287646527" name="Maternidade" lane="-547254018_1" startPos="0.00" endPos="25.00" friendlyPos="true" lines="X13i X15i X11i X10i X12i"/>
+    <busStop id="-5350809002" name="Antiga TVM" lane="-4360415_1" startPos="0.00" endPos="0.20" friendlyPos="true"/>
+    <busStop id="-5433484621" name="Esquina do Parque" lane="-501039674_1" startPos="0.00" endPos="7.24" friendlyPos="true" lines="406v X19i"/>
+    <busStop id="-6794268127" name="Museu (404)" lane="-727662841_0" startPos="0.00" endPos="8.15" friendlyPos="true" lines="404i"/>
+    <busStop id="-6794268153@10054231" name="Museu (204)" lane="-730025870_0" startPos="11.29" endPos="26.29" friendlyPos="true"/>
+    <busStop id="-6794268155" name="Museu (202)" lane="-730025870_0" startPos="11.29" endPos="26.29" friendlyPos="true" lines="202i"/>
+    <busStop id="1675593954" name="Maternidade" lane="501039672_1" startPos="0.00" endPos="19.25" friendlyPos="true" lines="406i X13i X15i X11i X10i 403i X12i X19v"/>
+    <busStop id="2592034535" name="Intercape (Av. 24 de Julho)" lane="724479644#1_0" startPos="49.90" endPos="64.90" friendlyPos="true"/>
+    <busStop id="4720676855" name="Museu (X39)" lane="726863128_0" startPos="14.39" endPos="29.39" friendlyPos="true" lines="X39i"/>
+    <busStop id="4720676855@10054130" name="Museu (X39)" lane="726863128_0" startPos="14.39" endPos="29.39" friendlyPos="true" lines="X39v"/>
+    <busStop id="5273457038" name="Distrito" lane="552827146#1_0" startPos="0.00" endPos="25.00" friendlyPos="true" lines="508v X29i 501v 302i 307i X28i 502v 305i X32i X33v X38i X39i 409v C1i 408i C6i"/>
+    <busStop id="5273457040" name="Hospital Central" lane="552827143#1_0" startPos="0.00" endPos="25.00" friendlyPos="true" lines="508v X29i 501v 302i 307i X28i 502v 305i X32i X33v X38i X39i 409v C1i C5v 408i C9v"/>
+    <busStop id="5273457042" name="Hospital Central" lane="725127418#3_0" startPos="8.08" endPos="33.08" friendlyPos="true" lines="508i 501i X29v X33i 302v 307v X28v 502i 305v X32v X38v X39v 409i C1v C5i 408v C9i"/>
+    <busStop id="5273457044" name="Ministério da Saúde" lane="552827128#0_1" startPos="0.00" endPos="25.00" friendlyPos="true" lines="508v X29i 501v 302i 307i X28i 502v 305i X32i X33v X38i X39i 409v C1i C6i"/>
+    <busStop id="5273493397" name="Electricidade" lane="725127420#4_0" startPos="4.18" endPos="29.18" friendlyPos="true" lines="508i 501i X29v X33i 302v 307v X28v 502i 305v X32v X38v X39v 409i C1v 408v C6v"/>
+    <busStop id="5273493399" name="Electricidade" lane="552827128#3_1" startPos="2.61" endPos="27.61" friendlyPos="true" lines="508v X29i 501v 302i 307i X28i 502v 305i X32i X33v X38i X39i 409v C1i 408i C6i"/>
+    <busStop id="5273518592" name="3 de Fevereiro" lane="728836938_1" startPos="24.88" endPos="49.88" friendlyPos="true" lines="404v X38v X39v 215v 406v 221v 222v X13v X15v X11v X10v C1v 403v X12v X19i"/>
+    <busStop id="5280821133" name="Maternidade" lane="4360414#3_1" startPos="50.51" endPos="65.51" friendlyPos="true" lines="404v 215v 221v 222v X13v X15v X11v X10v 403v X12v"/>
+    <busStop id="5280821135" name="Polana" lane="725127387#0_0" startPos="0.00" endPos="15.00" friendlyPos="true" lines="501v 502v X33v X47v 412v 409v C9v C7v"/>
+    <busStop id="5280821137" name="Polana" lane="1313164998_0" startPos="32.78" endPos="57.78" friendlyPos="true" lines="501i X33i 502i X47i 412i 409i C9i C7i"/>
+    <busStop id="5280897268" name="Mangueira" lane="547254008#4_0" startPos="0.00" endPos="15.98" friendlyPos="true" lines="222i 404v 215v 406v 221v 222v X13v X15v X11v X10v 403v X12v">
+        <access lane="-255997801_0" pos="0.00" length="27.20" friendlyPos="1"/>
+        <access lane="-258089111_0" pos="0.00" length="20.87" friendlyPos="1"/>
+        <access lane="155124254#0_0" pos="0.00" length="17.65" friendlyPos="1"/>
+        <access lane="255997801_0" pos="85.26" length="15.53" friendlyPos="1"/>
+        <access lane="258089111_0" pos="41.67" length="25.45" friendlyPos="1"/>
+    </busStop>
+    <busStop id="5282381461" name="Mercearia" lane="563922720#3_1" startPos="10.37" endPos="35.37" friendlyPos="true" lines="X19v"/>
+    <busStop id="5282381463" name="Esquina" lane="563922722_1" startPos="0.00" endPos="25.00" friendlyPos="true" lines="X19v X19i"/>
+    <busStop id="5282381465" name="Hospital" lane="563922723#2_1" startPos="101.43" endPos="126.43" friendlyPos="true" lines="X19v X19i"/>
+    <busStop id="5287517823" name="Museu (X29)" lane="726863128_0" startPos="37.03" endPos="52.03" friendlyPos="true" lines="X29i"/>
+    <busStop id="5287517823@10047032" name="Museu (X29)" lane="726863128_0" startPos="37.03" endPos="52.03" friendlyPos="true" lines="X29v"/>
+    <busStop id="5287517824" name="Museu (X12)" lane="727850255_0" startPos="32.17" endPos="57.17" friendlyPos="true" lines="X13v X12v"/>
+    <busStop id="5287517824@7335531" name="Museu (X12)" lane="727850255_0" startPos="32.17" endPos="57.17" friendlyPos="true" lines="X12i"/>
+    <busStop id="5287517825" name="Museu (X10)" lane="727850255_0" startPos="54.15" endPos="69.15" friendlyPos="true" lines="X10i"/>
+    <busStop id="5287517830" name="Esquina 24 de Julho" lane="600777629#1_1" startPos="9.74" endPos="34.74" friendlyPos="true" lines="X29v 302v 307v X28v 305v X32v 404v X38v X39v 215v 406v 221v 222v X13v X15v X11v X10v C1v 408v 403v X12v X19i"/>
+    <busStop id="5287517832" name="Esquina do Parque" lane="596538059_1" startPos="0.00" endPos="25.00" friendlyPos="true" lines="404v 215v 221v 222v X13v X15v X11v X10v 403v X12v"/>
+    <busStop id="5287525622" name="Museu (X47)" lane="726863128_0" startPos="22.47" endPos="37.47" friendlyPos="true" lines="X47v"/>
+    <busStop id="5287525622@10050654" name="Museu (X47)" lane="726863128_0" startPos="22.47" endPos="37.47" friendlyPos="true" lines="X47i"/>
+    <busStop id="5287525623" name="Museu (X28)" lane="726863128_0" startPos="29.80" endPos="44.80" friendlyPos="true" lines="X28v"/>
+    <busStop id="5287525623@10049504" name="Museu (X28)" lane="726863128_0" startPos="29.80" endPos="44.80" friendlyPos="true" lines="X28i"/>
+    <busStop id="5287525624" name="Museu (X15)" lane="727850255_0" startPos="21.65" endPos="36.65" friendlyPos="true" lines="X15i"/>
+    <busStop id="5287525624@10066470" name="Museu (X15)" lane="727850255_0" startPos="21.65" endPos="36.65" friendlyPos="true" lines="X15v X10v"/>
+    <busStop id="5287525625" name="Museu (X13)" lane="727850255_0" startPos="29.13" endPos="44.13" friendlyPos="true" lines="X13i"/>
+    <busStop id="5287525626" name="Museu (X11)" lane="727850255_0" startPos="45.23" endPos="60.23" friendlyPos="true" lines="X11v"/>
+    <busStop id="5287525626@10066906" name="Museu (X11)" lane="727850255_0" startPos="45.23" endPos="60.23" friendlyPos="true" lines="X11i"/>
+    <busStop id="5287525629" name="Esquina da Escola" lane="473445343_1" startPos="0.75" endPos="25.75" friendlyPos="true" lines="404v 215v 221v 222v X13v X15v X11v X10v 403v X12v"/>
+    <busStop id="5287537521" name="Museu (X38)" lane="726863128_0" startPos="7.30" endPos="22.30" friendlyPos="true" lines="X38v"/>
+    <busStop id="5287537521@10054063" name="Museu (X38)" lane="726863128_0" startPos="7.30" endPos="22.30" friendlyPos="true" lines="X38i"/>
+    <busStop id="5287537522" name="Museu (X32)" lane="726863128_0" startPos="46.10" endPos="61.10" friendlyPos="true" lines="X32i"/>
+    <busStop id="5287537522@10049723" name="Museu (X32)" lane="726863128_0" startPos="46.10" endPos="61.10" friendlyPos="true" lines="X32v"/>
+    <busStop id="5287537526" name="Bassopa" lane="600777636_1" startPos="24.13" endPos="49.13" friendlyPos="true" lines="X29v 302v 307v X28v 305v X32v 404v X38v X39v 215v 406v 221v 222v X13v X15v X11v X10v 403v X12v X19i"/>
+    <busStop id="5287537621" name="Museu (X19)" lane="727850255_0" startPos="14.60" endPos="29.60" friendlyPos="true" lines="X19v"/>
+    <busStop id="5287537621@8052058" name="Museu (X19)" lane="727850255_0" startPos="14.60" endPos="29.60" friendlyPos="true" lines="X19i"/>
+    <busStop id="5287646529" name="Oftamologia" lane="725363794_1" startPos="0.00" endPos="25.00" friendlyPos="true" lines="222i 404i X38v X39v 215i 406i 221i X13i X15i X11i X10i C1v C6v 403i X12i"/>
+    <busStop id="5287683921" name="Cristal" lane="479355405#0_1" startPos="0.00" endPos="25.00" friendlyPos="true" lines="X29i 302i 307i X28i 305i X32i 222i 404i X38i X39i 215i 406i 221i X13i X15i X11i X10i C6i 403i X12i"/>
+    <busStop id="5336483146" name="Onp" lane="725127385#1_0" startPos="23.17" endPos="48.17" friendlyPos="true" lines="501v 502v X33v 409v C9v"/>
+    <busStop id="5336497463" name="Esquina" lane="725283976_0" startPos="1.59" endPos="26.59" friendlyPos="true" lines="501i X33i 502i X47i 412i 409i C9i C7i"/>
+    <busStop id="5350002106" name="UP" lane="724479644#1_0" startPos="0.00" endPos="25.00" friendlyPos="true" lines="208i 109i 202i 206i 115i 204i 210i 212i 218i 220i 608i 112v"/>
+    <busStop id="5350002109" name="Mimmos" lane="308201857#5_0" startPos="8.92" endPos="33.92" friendlyPos="true" lines="208v 109v 202v 206v 115v 204v 210v 212v 218v 220v C2v 608v C4v 114v 112i"/>
+    <busStop id="5350002110" name="Mimmos" lane="724479643#2_0" startPos="9.25" endPos="34.25" friendlyPos="true" lines="208i 109i 202i 206i 115i 204i 210i 212i 218i 220i 608i C2i C4i 114i 112v"/>
+    <busStop id="5350002114" name="Interfranca" lane="724479642#6_0" startPos="0.00" endPos="0.20" friendlyPos="true" lines="208i 109i 202i 206i 115i 204i 210i 212i 218i 220i 608i C2i 114i 112v"/>
+    <busStop id="5350002116" name="Interfranca" lane="725900743#3_0" startPos="4.78" endPos="29.78" friendlyPos="true" lines="208v 109v 202v 206v 115v 204v 210v 212v 218v 220v C2v 608v 114v 112i"/>
+    <busStop id="5350005891" name="UP" lane="725900742#2_0" startPos="20.29" endPos="45.29" friendlyPos="true" lines="208v 109v 202v 206v 115v 204v 210v 212v 218v 220v 608v 112i"/>
+    <busStop id="5350809002" name="Antiga TVM" lane="725127386#0_0" startPos="0.00" endPos="15.00" friendlyPos="true" lines="501v 502v X33v X47v 412v 409v C9v"/>
+    <busStop id="5350809003" name="Antiga TVM" lane="725127415#3_0" startPos="9.95" endPos="34.95" friendlyPos="true" lines="501i X33i 502i X47i 412i 409i C9i"/>
+    <busStop id="5383258249" name="Ministério da Saúde" lane="725127419#3_0" startPos="1.40" endPos="26.40" friendlyPos="true" lines="508i 501i X33i 502i 409i C1v"/>
+    <busStop id="5383313760" name="3 de Fevereiro" lane="155829240#3_0" startPos="9.43" endPos="34.43" friendlyPos="true" lines="501i X33i 502i 409i"/>
+    <busStop id="5433484422" name="Esquina" lane="256804512_1" startPos="16.73" endPos="31.73" friendlyPos="true" lines="X19v"/>
+    <busStop id="5433484621" name="Esquina do Parque" lane="501039674_1" startPos="0.00" endPos="7.24" friendlyPos="true" lines="406v X19v"/>
+    <busStop id="5433927527" name="Mercearia" lane="563925300_1" startPos="36.86" endPos="61.86" friendlyPos="true" lines="X19i"/>
+    <busStop id="6792945026" name="3 de Fevereiro" lane="725127384#2_0" startPos="62.52" endPos="87.52" friendlyPos="true" lines="501v 502v X33v 409v"/>
+    <busStop id="6794268121" name="Museu (508)" lane="727671068_0" startPos="0.00" endPos="15.00" friendlyPos="true" lines="508i"/>
+    <busStop id="6794268121@10045219" name="Museu (508)" lane="727671068_0" startPos="0.00" endPos="15.00" friendlyPos="true" lines="508v"/>
+    <busStop id="6794268123" name="Museu (412)" lane="727662843#1_0" startPos="25.34" endPos="40.34" friendlyPos="true" lines="412i"/>
+    <busStop id="6794268123@10069493" name="Museu (412)" lane="727662843#1_0" startPos="25.34" endPos="40.34" friendlyPos="true" lines="412v"/>
+    <busStop id="6794268125" name="Museu (406)" lane="730119192#1_0" startPos="0.00" endPos="8.11" friendlyPos="true" lines="406i"/>
+    <busStop id="6794268125@10057628" name="Museu (406)" lane="730119192#1_0" startPos="0.00" endPos="8.11" friendlyPos="true" lines="406v"/>
+    <busStop id="6794268126" name="Museu (404)" lane="730119192#1_0" startPos="0.00" endPos="8.11" friendlyPos="true" lines="404v"/>
+    <busStop id="6794268129" name="Museu (403)" lane="726860805_0" startPos="0.00" endPos="15.00" friendlyPos="true" lines="403v"/>
+    <busStop id="6794268129@10104793" name="Museu (403)" lane="726860805_0" startPos="0.00" endPos="15.00" friendlyPos="true" lines="403i"/>
+    <busStop id="6794268131" name="Museu (307)" lane="726860805_0" startPos="6.34" endPos="21.34" friendlyPos="true" lines="307i"/>
+    <busStop id="6794268131@10049393" name="Museu (307)" lane="726860805_0" startPos="6.34" endPos="21.34" friendlyPos="true" lines="307v"/>
+    <busStop id="6794268133" name="Museu (305)" lane="726860805_0" startPos="19.57" endPos="34.57" friendlyPos="true" lines="305i"/>
+    <busStop id="6794268133@10049702" name="Museu (305)" lane="726860805_0" startPos="19.57" endPos="34.57" friendlyPos="true" lines="305v"/>
+    <busStop id="6794268135" name="Museu (302)" lane="726860805_0" startPos="30.41" endPos="45.41" friendlyPos="true" lines="302v"/>
+    <busStop id="6794268135@10049292" name="Museu (302)" lane="726860805_0" startPos="30.41" endPos="45.41" friendlyPos="true" lines="302i"/>
+    <busStop id="6794268137" name="Museu (222)" lane="727671068_0" startPos="31.83" endPos="46.83" friendlyPos="true" lines="222i"/>
+    <busStop id="6794268137@10058021" name="Museu (222)" lane="727671068_0" startPos="31.83" endPos="46.83" friendlyPos="true" lines="222v"/>
+    <busStop id="6794268138" name="Museu (221)" lane="727671068_0" startPos="37.93" endPos="52.93" friendlyPos="true" lines="221i"/>
+    <busStop id="6794268139" name="Museu (221)" lane="727671068_0" startPos="39.39" endPos="54.39" friendlyPos="true" lines="221v"/>
+    <busStop id="6794268141" name="Museu (220)" lane="727671068_0" startPos="48.10" endPos="63.10" friendlyPos="true" lines="220v"/>
+    <busStop id="6794268141@10057695" name="Museu (220)" lane="727671068_0" startPos="48.10" endPos="63.10" friendlyPos="true" lines="220i"/>
+    <busStop id="6794268143" name="Museu (218)" lane="727671068_0" startPos="57.89" endPos="72.89" friendlyPos="true" lines="218i"/>
+    <busStop id="6794268143@10057602" name="Museu (218)" lane="727671068_0" startPos="57.89" endPos="72.89" friendlyPos="true" lines="218v"/>
+    <busStop id="6794268145" name="Museu (212)" lane="727671068_0" startPos="68.96" endPos="83.96" friendlyPos="true" lines="212i"/>
+    <busStop id="6794268145@10054602" name="Museu (212)" lane="727671068_0" startPos="68.96" endPos="83.96" friendlyPos="true" lines="212v"/>
+    <busStop id="6794268147" name="Museu (210)" lane="727671068_0" startPos="80.11" endPos="95.11" friendlyPos="true" lines="210i"/>
+    <busStop id="6794268147@10054378" name="Museu (210)" lane="727671068_0" startPos="80.11" endPos="95.11" friendlyPos="true" lines="210v"/>
+    <busStop id="6794268149" name="Museu (208)" lane="727671068_0" startPos="90.24" endPos="105.24" friendlyPos="true" lines="208i"/>
+    <busStop id="6794268149@10037138" name="Museu (208)" lane="727671068_0" startPos="90.24" endPos="105.24" friendlyPos="true" lines="208v"/>
+    <busStop id="6794268151" name="Museu (206)" lane="727671068_0" startPos="93.13" endPos="108.13" friendlyPos="true" lines="206i"/>
+    <busStop id="6794268151@10053438" name="Museu (206)" lane="727671068_0" startPos="93.13" endPos="108.13" friendlyPos="true" lines="206v"/>
+    <busStop id="6794268153" name="Museu (204)" lane="727710701_0" startPos="0.00" endPos="15.00" friendlyPos="true" lines="204v"/>
+    <busStop id="6794268155@10053262" name="Museu (202)" lane="727710701_0" startPos="6.03" endPos="21.03" friendlyPos="true" lines="202v"/>
+    <busStop id="6794268157" name="Museu (115)" lane="727710701_0" startPos="9.49" endPos="24.49" friendlyPos="true" lines="115v"/>
+    <busStop id="6794268157@10053541" name="Museu (115)" lane="729905553_0" startPos="0.00" endPos="15.00" friendlyPos="true" lines="115i"/>
+    <busStop id="6794268159" name="Museu (109)" lane="729905553_0" startPos="11.22" endPos="26.22" friendlyPos="true" lines="109v"/>
+    <busStop id="6794268159@10051268" name="Museu (109)" lane="728984351_0" startPos="0.00" endPos="10.83" friendlyPos="true" lines="109i"/>
+    <busStop id="6825215431" name="Museu (C2)" lane="728984351_0" startPos="0.00" endPos="10.83" friendlyPos="true" lines="C2i"/>
+    <busStop id="6825215431@10083689" name="Museu (C2)" lane="728331750_0" startPos="0.00" endPos="6.83" friendlyPos="true" lines="C2v"/>
+    <busStop id="6825652279" name="Vila das Arábias" lane="725900742#2_0" startPos="129.83" endPos="154.83" friendlyPos="true" lines="C2v"/>
+    <busStop id="6825652280" name="Vila das Arábias" lane="728807037#1_0" startPos="65.93" endPos="90.93" friendlyPos="true" lines="C2i"/>
+    <busStop id="6825853385" name="Escola" lane="728836936#1_0" startPos="0.75" endPos="25.75" friendlyPos="true" lines="C1i"/>
+    <busStop id="6829744234" name="Museu (608)" lane="727825441_0" startPos="0.00" endPos="25.00" friendlyPos="true" lines="608i"/>
+    <busStop id="6829744234@10085234" name="Museu (608)" lane="726860805_0" startPos="23.14" endPos="48.14" friendlyPos="true" lines="608v"/>
+    <busStop id="6829768790" name="Museu (C4)" lane="728984351_0" startPos="0.00" endPos="10.83" friendlyPos="true" lines="C4v"/>
+    <busStop id="6829768790@10086923" name="Museu (C4)" lane="727850255_0" startPos="0.00" endPos="15.00" friendlyPos="true" lines="C4i"/>
+    <busStop id="6830807483" name="Esquina" lane="730769637_0" startPos="0.00" endPos="25.00" friendlyPos="true" lines="C7v"/>
+    <busStop id="6831264489" name="Segunda Esquina" lane="166931996#2_1" startPos="2.40" endPos="27.40" friendlyPos="true" lines="C1v 408v"/>
+    <busStop id="6831276188" name="Primeira Esquina" lane="729145571_1" startPos="0.00" endPos="25.00" friendlyPos="true" lines="C1v 408v"/>
+    <busStop id="6832941871" name="TVM" lane="729351584_1" startPos="42.15" endPos="67.15" friendlyPos="true"/>
+    <busStop id="6832941873" name="TVM" lane="1133849615#2_0" startPos="0.00" endPos="21.46" friendlyPos="true" lines="C8i">
+        <access lane="-1061002262_0" pos="38.51" length="42.26" friendlyPos="1"/>
+        <access lane="1061002260_0" pos="0.00" length="87.21" friendlyPos="1"/>
+        <access lane="1061002261_0" pos="29.10" length="83.57" friendlyPos="1"/>
+        <access lane="1061002262_0" pos="0.00" length="37.53" friendlyPos="1"/>
+        <access lane="729351584_0" pos="57.42" length="11.91" friendlyPos="1"/>
+    </busStop>
+    <busStop id="6835251538" name="Museu (215)" lane="727671068_0" startPos="59.50" endPos="84.50" friendlyPos="true" lines="215i"/>
+    <busStop id="6835251538@10057008" name="Museu (215)" lane="727671068_0" startPos="59.50" endPos="84.50" friendlyPos="true" lines="215v"/>
+    <busStop id="6837483064" name="Museu (114)" lane="729905553_0" startPos="0.00" endPos="25.00" friendlyPos="true" lines="114i"/>
+    <busStop id="6837483064@10097429" name="Museu (114)" lane="729905553_0" startPos="0.00" endPos="25.00" friendlyPos="true" lines="114v"/>
+    <busStop id="6838863598" name="Museu (112)" lane="729905553_0" startPos="1.22" endPos="26.22" friendlyPos="true" lines="112v"/>
+    <busStop id="6838863598@10099423" name="Museu (112)" lane="729905553_0" startPos="1.22" endPos="26.22" friendlyPos="true" lines="112i"/>
+    <busStop id="6839793910" name="Museu (408)" lane="727662843#1_0" startPos="16.26" endPos="41.26" friendlyPos="true" lines="408i"/>
+    <busStop id="6839793910@10101361" name="Museu (408)" lane="727662843#1_0" startPos="16.26" endPos="41.26" friendlyPos="true" lines="408v"/>
+    <busStop id="6840455904" name="Museu (C1)" lane="727850255_0" startPos="0.00" endPos="25.00" friendlyPos="true" lines="C1i"/>
+    <busStop id="6840455904@10088266" name="Museu (C1)" lane="727850255_0" startPos="0.00" endPos="25.00" friendlyPos="true" lines="C1v"/>
+    <busStop id="6842850339" name="Museu (C6)" lane="727850255_0" startPos="4.02" endPos="29.02" friendlyPos="true" lines="C6v"/>
+    <busStop id="6842850339@10104783" name="Museu (C6)" lane="727850255_0" startPos="4.02" endPos="29.02" friendlyPos="true" lines="C6i"/>
+    <busStop id="9803715743" name="instituto" lane="728807037#1_0" startPos="30.08" endPos="45.08" friendlyPos="true"/>
+</additional>

@@ -35,7 +35,10 @@
          (net/paragens.add.xml), logo apos o cruzamento, confirmada pelo
          autor. Tempo de paragem tipico para embarque/desembarque. -->
     <route id="EM2_straight_com_paragem" edges="725127419#1 725127419#3">
-        <stop busStop="paragem_ministerio_saude" duration="20"/>
+        <!-- parking="true": o autocarro para, mas o transito atras consegue
+             ultrapassa-lo, em vez de ficar bloqueado na faixa (efeito
+             pratico de uma baia de autocarro fisica, ver PROGRESSO.md). -->
+        <stop busStop="paragem_ministerio_saude" duration="20" parking="true"/>
     </route>
     <route id="SA_straight" edges="24769111#9 24769111#11"/>
     <route id="SA_right"    edges="24769111#9 552827132"/>
@@ -60,5 +63,18 @@
     <flow id="f_SA_straight_cha" type="chapa"   route="SA_straight" begin="0" end="3600" vehsPerHour="105" departLane="best"/>
     <flow id="f_SA_right_lig"    type="ligeiro" route="SA_right"    begin="0" end="3600" vehsPerHour="115" departLane="best"/>
     <flow id="f_SA_left_lig"     type="ligeiro" route="SA_left"     begin="0" end="3600" vehsPerHour="85"  departLane="best"/>
+
+    <!-- Peoes a atravessar Eduardo Mondlane junto ao cruzamento, usando as
+         passadeiras reais (net/eduardo_mondlane_salvador_allende.net.xml,
+         ver PROGRESSO.md). So EM1/EM2 por agora: a rede de passeios de
+         Salvador Allende ainda nao esta completa o suficiente para uma
+         travessia fiavel ai. Volume estimado, zona com hospital, faculdade
+         de medicina e jardim infantil (CLAUDE.md, seccao 1). -->
+    <personFlow id="pf_em1_para_em2" begin="0" end="3600" vehsPerHour="40">
+        <walk from="552827135#0" to="725127419#3"/>
+    </personFlow>
+    <personFlow id="pf_em2_para_em1" begin="0" end="3600" vehsPerHour="40">
+        <walk from="725127419#1" to="552827132"/>
+    </personFlow>
 
 </routes>

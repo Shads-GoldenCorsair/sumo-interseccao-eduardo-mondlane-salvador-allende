@@ -38,4 +38,13 @@
     <flow id="f_SA_right_lig"    type="ligeiro" route="SA_right"    begin="0" end="3600" vehsPerHour="11" departLane="best"/>
     <flow id="f_SA_left_lig"     type="ligeiro" route="SA_left"     begin="0" end="3600" vehsPerHour="9"  departLane="best"/>
 
+    <!-- Peoes a atravessar Eduardo Mondlane, ver demanda_pico.rou.xml para
+         a explicacao. Volume nocturno reduzido. -->
+    <personFlow id="pf_em1_para_em2" begin="0" end="3600" vehsPerHour="8">
+        <walk from="552827135#0" to="725127419#3"/>
+    </personFlow>
+    <personFlow id="pf_em2_para_em1" begin="0" end="3600" vehsPerHour="8">
+        <walk from="725127419#1" to="552827132"/>
+    </personFlow>
+
 </routes>
