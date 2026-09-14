@@ -502,9 +502,61 @@ fluxo**.
 **Teste de fumo confirmado** (3 episódios, baixo fluxo, já com passadeiras
 e peões): recompensa -359.0, -85.0, -64.0, melhora de forma consistente.
 
+## 2026-09-14 — Sessão 2: correcções finais (sem passeio central, chapas restritas)
+
+O autor corrigiu 4 pontos depois de ver a rede anterior:
+
+1. **"No meio de Eduardo Mondlane não tem passeio, RETIRE."** Verificado
+   nos dados reais do OSM: as vias de Eduardo Mondlane só têm a tag
+   `foot=yes` (peões permitidos na via), **não** têm `sidewalk=` (sem
+   passeio dedicado mapeado). O passeio que a correcção anterior tinha
+   criado ali (via `--osm.oneway-reverse-sidewalk`) era sintético, não
+   real. Removido: já não se força nenhum passeio em Eduardo Mondlane.
+   **Descoberta útil:** os peões continuam a conseguir atravessar sem
+   nenhuma infra-estrutura de passeio/passadeira dedicada, porque o SUMO
+   deixa-os andar directamente na via quando esta tem `foot=yes`, tal
+   como acontece na realidade em zonas sem passeio formal. Testado e
+   confirmado antes de aplicar à rede real.
+2. **Paragem de autocarro do lado do passeio, sempre um pouco depois do
+   semáforo:** já estava assim (aresta `725127419#3`, depois do
+   cruzamento, faixa mais à esquerda). Confirmado, sem alteração.
+3. **Chapas só na faixa esquerda (a "sem pressa"), proibidas nas faixas
+   centrais de Eduardo Mondlane.** Explicado pelo autor: Moçambique segue
+   o código de estrada britânico (condução à esquerda), por isso a faixa
+   mais próxima do separador central (índice 0 no SUMO) é a rápida/
+   ultrapassagem, e a mais à esquerda (índice mais alto, junto ao
+   passeio/edifícios) é a lenta, onde andam os chapas. Implementado com
+   `disallow="taxi"` (vClass dos chapas) nas faixas centrais das 6 arestas
+   de Eduardo Mondlane (as duas vias a montante da restrição de mediana,
+   mais as 4 arestas junto ao cruzamento). **Bug próprio encontrado e
+   corrigido:** a primeira tentativa de inserir "taxi" na lista `disallow`
+   já existente falhou silenciosamente (o padrão de substituição não
+   contava com outros atributos entre `id=` e `disallow=`); confirmado
+   com verificação directa via TraCI (antes: chapas em todas as faixas;
+   depois: só na faixa esquerda) antes de dar como resolvido.
+4. **Passadeiras só no cruzamento, não depois dele.** Como já não há
+   passeio a suportar passadeiras dedicadas em Eduardo Mondlane (ponto 1),
+   isto deixou de se aplicar por essa via; os peões atravessam directamente
+   como descrito no ponto 1. As passadeiras reais de Salvador Allende
+   (fora do âmbito desta correcção) mantêm-se como estavam.
+
+Rede reconstruída do zero (osm.sidewalks + osm.crossings apenas, sem
+guess forçado), `tlLogic` reconstruído (14 ligações de veículos, sem
+ligações de peões desta vez, já que não há passadeira formal em EM).
+Restrição de mediana (separador físico) reaplicada aos índices correctos
+(faixa 1 e 2 de 3, já sem deslocamento por passeio). Paragem de autocarro
+corrigida de volta para a faixa 2.
+
+Validado com `sumo -c` em ambos os cenários, sem erros nem avisos.
+Baseline remedido: **12,0s pico, 9,9s baixo fluxo**.
+
+**Teste de fumo confirmado** (3 episódios, baixo fluxo): recompensa
+-468.0, -108.0, -128.0, melhora de forma consistente com a rede final
+desta sessão.
+
 **Ainda por fazer, explicitamente pendente:**
-- Fluxo de peões em Salvador Allende (pendente a rede de passeios ali
-  ficar completa).
+- Fluxo de peões em Salvador Allende (fora do âmbito desta correcção,
+  decisão anterior do autor mantém-se).
 - Validar o resume end-to-end com uma interrupção real (kill do processo,
   não só teste unitário das funções de guardar/carregar), idealmente numa
   máquina menos ocupada ou já no próprio Colab.

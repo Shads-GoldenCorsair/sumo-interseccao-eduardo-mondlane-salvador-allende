@@ -9,4 +9,13 @@
 -->
 <connections>
     <delete from="725127419#1" to="552827132"/>
+
+    <!-- Passadeiras apenas no cruzamento, so do lado de entrada (nao
+         duplicadas do lado de saida), confirmado pelo autor. Definidas
+         manualmente porque as vias de Eduardo Mondlane nao tem passeio
+         mapeado no OSM (so foot=yes, sem infra-estrutura dedicada), so
+         Salvador Allende tem. -->
+    <crossing node="cluster_12168401392_13673178841_13673178842_1783252720" edges="552827135#0"/>
+    <crossing node="cluster_12168401392_13673178841_13673178842_1783252720" edges="725127419#1"/>
+    <crossing node="cluster_12168401392_13673178841_13673178842_1783252720" edges="24769111#9"/>
 </connections>
