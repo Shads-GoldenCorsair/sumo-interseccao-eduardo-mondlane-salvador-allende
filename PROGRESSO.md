@@ -199,6 +199,13 @@ do que foi mudando e porquê.
 - Explicado ao autor como testar manualmente a rede e o agente com
   `sumo-gui`, para confirmar visualmente a geometria do cruzamento real e
   o ciclo do semáforo antes de lançar o treino completo.
+- **Corrigido:** o auto-teste `demo()` do `sumo_env.py` (corre só 50 passos)
+  tinha sobrescrito outra vez os ficheiros de baseline do cenário baixo
+  fluxo com uma corrida truncada. Regerado o baseline completo (1h,
+  225 veículos) com `sumo -c baixo_fluxo.sumocfg`. **Cuidado a reter:**
+  correr `sumo_env.py` ou `dqn_agent.py` directamente (auto-testes) usa os
+  mesmos ficheiros `outputs/` que o baseline; não correr os auto-testes
+  depois de gerar um baseline sem regerar o baseline a seguir.
 
 ## Como usar este ficheiro
 
