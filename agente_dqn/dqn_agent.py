@@ -86,6 +86,13 @@ class AgenteDQN:
     def actualizar_rede_alvo(self):
         self.rede_alvo.set_weights(self.rede.get_weights())
 
+    def guardar_pesos(self, caminho):
+        self.rede.save_weights(caminho)
+
+    def carregar_pesos(self, caminho):
+        self.rede.load_weights(caminho)
+        self.rede_alvo.set_weights(self.rede.get_weights())
+
 
 def demo():
     """Auto-teste minimo: enche o buffer com transicoes falsas, confirma que

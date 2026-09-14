@@ -279,7 +279,45 @@ confirmado de novo após a correcção: **12,2s pico, 9,8s baixo fluxo**
 tinha alterado a média o suficiente para notar sem verificar o
 `n` de viagens).
 
+## 2026-09-14 — Sessão 2: checkpoint/resume para o treino no Colab
+
+Antes de dar o passo-a-passo final ao autor, foi identificado um risco: o
+Colab gratuito desliga por inactividade e não tem limite de sessão
+garantido; sem checkpoint, uma sessão de horas perdia-se toda.
+
+- `dqn_agent.py` ganhou `guardar_pesos()`/`carregar_pesos()` (usa
+  `keras.Model.save_weights`/`load_weights`).
+- `train.py` grava um checkpoint (pesos + episódio actual + epsilon) a
+  cada 10 episódios em `outputs/_checkpoints/`. Ao arrancar, se existir
+  checkpoint para essa semente/cenário, retoma a partir daí em vez de
+  recomeçar. CSV de resultados passou a ser escrito de forma incremental
+  (uma linha por episódio, com flush), não só no fim.
+- **Bug corrigido durante a implementação:** a versão inicial abria o CSV
+  em modo "escrita" sempre que uma semente não tinha checkpoint próprio, o
+  que apagava os resultados de sementes anteriores ao correr várias
+  sementes seguidas no mesmo processo. Corrigido: o ficheiro só é criado
+  de novo se ainda não existir ou estiver vazio, todas as sementes
+  seguintes fazem sempre append.
+- `treino_colab.ipynb` actualizado: nova célula que monta o Google Drive e
+  redirecciona `outputs/_checkpoints/` para lá, porque o disco do Colab é
+  efémero (um reinício completo da sessão apagaria os checkpoints
+  guardados só localmente). Célula de treino passou a usar `python -u`
+  (sem buffer), para o progresso aparecer no output em tempo real em vez
+  de só no fim.
+- **Validação:** testada directamente a função `guardar_pesos`/
+  `carregar_pesos` (pesos e progresso coincidem depois de recarregar).
+  Uma tentativa de validação end-to-end (correr 12 episódios reais e
+  interromper a meio) acabou abortada por lentidão da máquina nesta
+  sessão (processos anteriores ainda a ocupar CPU); os processos
+  interrompidos à força corromperam outra vez os ficheiros de baseline
+  (efeito colateral da interrupção brusca, não do mecanismo de
+  checkpoint), baseline regenerado mais uma vez sem alteração dos
+  números (12,2s pico, 9,8s baixo fluxo).
+
 **Ainda por verificar/decidir:**
+- Validar o resume end-to-end com uma interrupção real (kill do processo,
+  não só teste unitário das funções de guardar/carregar), idealmente numa
+  máquina menos ocupada ou já no próprio Colab.
 - O autor referiu ainda "atenção às permissões para curva dos veículos na
   estrada" de forma geral; as ligações actuais (direita/esquerda/recto por
   aproximação) foram revistas e parecem coerentes com a imagem de

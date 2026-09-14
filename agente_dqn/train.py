@@ -14,10 +14,16 @@ semente por execucao, cada uma grava o seu proprio ficheiro CSV:
     python train.py --cenario pico --episodios 100 --semente-unica 1
     ...
 Depois junta os CSVs (mesmas colunas) para a analise final.
+
+Guarda um checkpoint (pesos da rede + progresso) a cada CHECKPOINT_CADA
+episodios em outputs/_checkpoints/. Se a execucao for interrompida (ex.:
+o Colab desliga a sessao), correr o mesmo comando outra vez retoma a
+partir do ultimo checkpoint em vez de recomecar do zero.
 """
 
 import argparse
 import csv
+import json
 import os
 import statistics
 
@@ -25,6 +31,8 @@ from dqn_agent import AgenteDQN, ACTUALIZAR_REDE_ALVO_CADA
 from sumo_env import AmbienteSumo
 
 RAIZ = os.path.dirname(__file__)
+PASTA_CHECKPOINTS = os.path.join(RAIZ, "..", "outputs", "_checkpoints")
+CHECKPOINT_CADA = 10  # episodios
 
 
 def correr_episodio(ambiente, agente, treinar=True):
@@ -44,20 +52,63 @@ def correr_episodio(ambiente, agente, treinar=True):
     return recompensa_total
 
 
-def treinar_uma_semente(caminho_sumocfg, semente, num_episodios):
-    agente = AgenteDQN(semente=semente)
-    ambiente = AmbienteSumo(caminho_sumocfg)
+def caminhos_checkpoint(cenario, semente):
+    prefixo = os.path.join(PASTA_CHECKPOINTS, f"{cenario}_semente{semente}")
+    return prefixo + ".weights.h5", prefixo + ".json"
 
-    recompensas = []
-    for episodio in range(num_episodios):
-        recompensa = correr_episodio(ambiente, agente)
-        recompensas.append(recompensa)
-        if (episodio + 1) % ACTUALIZAR_REDE_ALVO_CADA == 0:
-            agente.actualizar_rede_alvo()
-        print(f"semente={semente} episodio={episodio + 1}/{num_episodios} recompensa={recompensa:.1f} epsilon={agente.epsilon:.3f}")
+
+def treinar_uma_semente(caminho_sumocfg, cenario, semente, num_episodios, caminho_csv):
+    os.makedirs(PASTA_CHECKPOINTS, exist_ok=True)
+    caminho_pesos, caminho_progresso = caminhos_checkpoint(cenario, semente)
+
+    agente = AgenteDQN(semente=semente)
+    episodio_inicial = 0
+
+    if os.path.exists(caminho_progresso):
+        with open(caminho_progresso, encoding="utf-8") as f:
+            progresso = json.load(f)
+        agente.carregar_pesos(caminho_pesos)
+        agente.epsilon = progresso["epsilon"]
+        episodio_inicial = progresso["episodio"]
+        print(f"semente={semente}: retomado do checkpoint, episodio {episodio_inicial}")
+
+    # O CSV e sempre aberto em append: escreve o cabecalho so se o ficheiro
+    # ainda nao existir (primeira semente de uma execucao nova). Assim,
+    # correr varias sementes seguidas no mesmo processo, ou retomar depois
+    # de uma interrupcao, nunca apaga o que outras sementes ja gravaram.
+    ficheiro_novo = not os.path.exists(caminho_csv) or os.path.getsize(caminho_csv) == 0
+    ambiente = AmbienteSumo(caminho_sumocfg)
+    ultima_recompensa = None
+
+    with open(caminho_csv, "a", newline="", encoding="utf-8") as f:
+        escritor = csv.writer(f)
+        if ficheiro_novo:
+            escritor.writerow(["semente", "episodio", "recompensa"])
+
+        for episodio in range(episodio_inicial, num_episodios):
+            recompensa = correr_episodio(ambiente, agente)
+            ultima_recompensa = recompensa
+            escritor.writerow([semente, episodio + 1, recompensa])
+            f.flush()
+
+            if (episodio + 1) % ACTUALIZAR_REDE_ALVO_CADA == 0:
+                agente.actualizar_rede_alvo()
+
+            print(f"semente={semente} episodio={episodio + 1}/{num_episodios} recompensa={recompensa:.1f} epsilon={agente.epsilon:.3f}")
+
+            if (episodio + 1) % CHECKPOINT_CADA == 0:
+                agente.guardar_pesos(caminho_pesos)
+                with open(caminho_progresso, "w", encoding="utf-8") as fp:
+                    json.dump({"episodio": episodio + 1, "epsilon": agente.epsilon}, fp)
 
     ambiente.fechar()
-    return recompensas
+
+    # Treino desta semente completo: remove o checkpoint (ja nao e preciso retomar).
+    for caminho in (caminho_pesos, caminho_progresso):
+        if os.path.exists(caminho):
+            os.remove(caminho)
+
+    return ultima_recompensa
 
 
 def main():
@@ -75,16 +126,9 @@ def main():
     caminho_saida = os.path.join(RAIZ, "..", "outputs", f"treino_{args.cenario}{sufixo}.csv")
 
     recompensas_finais_por_semente = []
-
-    with open(caminho_saida, "w", newline="", encoding="utf-8") as f:
-        escritor = csv.writer(f)
-        escritor.writerow(["semente", "episodio", "recompensa"])
-
-        for semente in sementes:
-            recompensas = treinar_uma_semente(caminho_sumocfg, semente, args.episodios)
-            for episodio, recompensa in enumerate(recompensas, start=1):
-                escritor.writerow([semente, episodio, recompensa])
-            recompensas_finais_por_semente.append(recompensas[-1])
+    for semente in sementes:
+        recompensa_final = treinar_uma_semente(caminho_sumocfg, args.cenario, semente, args.episodios, caminho_saida)
+        recompensas_finais_por_semente.append(recompensa_final)
 
     media = statistics.mean(recompensas_finais_por_semente)
     desvio = statistics.stdev(recompensas_finais_por_semente) if len(recompensas_finais_por_semente) > 1 else 0.0
