@@ -4,8 +4,16 @@ Script de treino do agente DQN, com multiplas sementes aleatorias
 desvio-padrao).
 
 Uso:
-    python train.py --cenario pico --episodios 150
-    python train.py --cenario baixo_fluxo --episodios 150 --sementes 5
+    python train.py --cenario pico --episodios 100
+    python train.py --cenario baixo_fluxo --episodios 100 --sementes 5
+
+Para correr sementes em paralelo em sessoes separadas (ex.: varios
+notebooks Colab ao mesmo tempo), usa --semente-unica para treinar so uma
+semente por execucao, cada uma grava o seu proprio ficheiro CSV:
+    python train.py --cenario pico --episodios 100 --semente-unica 0
+    python train.py --cenario pico --episodios 100 --semente-unica 1
+    ...
+Depois junta os CSVs (mesmas colunas) para a analise final.
 """
 
 import argparse
@@ -57,10 +65,14 @@ def main():
     parser.add_argument("--cenario", choices=["pico", "baixo_fluxo"], required=True)
     parser.add_argument("--episodios", type=int, default=150)
     parser.add_argument("--sementes", type=int, default=5)
+    parser.add_argument("--semente-unica", type=int, default=None,
+                         help="Treina so esta semente (para correr em paralelo em varias sessoes)")
     args = parser.parse_args()
 
     caminho_sumocfg = os.path.join(RAIZ, "..", "config", f"{args.cenario}.sumocfg")
-    caminho_saida = os.path.join(RAIZ, "..", "outputs", f"treino_{args.cenario}.csv")
+    sementes = [args.semente_unica] if args.semente_unica is not None else list(range(args.sementes))
+    sufixo = f"_semente{args.semente_unica}" if args.semente_unica is not None else ""
+    caminho_saida = os.path.join(RAIZ, "..", "outputs", f"treino_{args.cenario}{sufixo}.csv")
 
     recompensas_finais_por_semente = []
 
@@ -68,7 +80,7 @@ def main():
         escritor = csv.writer(f)
         escritor.writerow(["semente", "episodio", "recompensa"])
 
-        for semente in range(args.sementes):
+        for semente in sementes:
             recompensas = treinar_uma_semente(caminho_sumocfg, semente, args.episodios)
             for episodio, recompensa in enumerate(recompensas, start=1):
                 escritor.writerow([semente, episodio, recompensa])

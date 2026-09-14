@@ -182,6 +182,24 @@ do que foi mudando e porquê.
   Capítulo V. Números antigos ainda recuperáveis no histórico do git
   (primeiro commit), não perdidos.
 
+## 2026-09-14 — Sessão 2: treino no Google Colab, teste manual
+
+- Decidido com o autor: o treino completo (Fase 4) corre no Google Colab,
+  não localmente, para libertar a máquina do autor durante as ~65-75h
+  estimadas.
+- `train.py` ganhou a opção `--semente-unica`, para treinar só uma semente
+  por execução (cada sessão Colab trata de uma semente, em paralelo).
+- Criado `agente_dqn/treino_colab.ipynb`: instala SUMO via `apt-get`, clona
+  o repositório privado (pede um GitHub personal access token em runtime,
+  não gravado no notebook), corre `train.py --semente-unica`, e no fim faz
+  commit/push do CSV de resultados dessa semente para o repositório.
+- Criado `agente_dqn/juntar_resultados.py`, para juntar os CSVs de todas as
+  sementes (depois de saírem do Colab) num só ficheiro e calcular a
+  média/desvio-padrão exigidos pelo `CLAUDE.md` (secção 3).
+- Explicado ao autor como testar manualmente a rede e o agente com
+  `sumo-gui`, para confirmar visualmente a geometria do cruzamento real e
+  o ciclo do semáforo antes de lançar o treino completo.
+
 ## Como usar este ficheiro
 
 Cada sessão de trabalho futura deve acrescentar uma secção nova aqui, com

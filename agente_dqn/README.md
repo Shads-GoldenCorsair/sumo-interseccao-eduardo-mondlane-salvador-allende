@@ -40,6 +40,22 @@ final da tese; ajustar para cima se a curva de recompensa nao estabilizar.
 Tempo estimado nesta maquina: ~15h (baixo fluxo) + ~55h (pico) para as 5
 sementes, por ser sequencial e por cenario ter muito mais veiculos.
 
+## Treino completo no Google Colab
+
+Para nao ocupar a maquina local durante horas, `treino_colab.ipynb` corre o
+treino no Colab. Cada sessao Colab treina **uma semente** (usa
+`--semente-unica`), para poderes abrir varias sessoes em paralelo, uma por
+semente. No fim, junta os CSVs de cada semente com:
+
+```bash
+.venv/Scripts/python juntar_resultados.py --cenario pico
+.venv/Scripts/python juntar_resultados.py --cenario baixo_fluxo
+```
+
+Isto gera `../outputs/treino_<cenario>.csv` (todas as sementes juntas) e
+reporta a media/desvio-padrao da recompensa final, exigidos pelo
+`CLAUDE.md` (secção 3).
+
 Resultados por episodio e semente em `../outputs/treino_<cenario>.csv`.
 
 ## Formulacao (nao mudar sem sinalizar no CLAUDE.md)
