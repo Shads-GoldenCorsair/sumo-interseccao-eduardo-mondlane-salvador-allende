@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Remove a viragem em U detectada entre os dois ramos de sentido unico da
+  Avenida Eduardo Mondlane (725127419#1 -> 552827132), confirmada como
+  fisicamente impossivel por observacao directa de imagem de satelite
+  (ver PROGRESSO.md). O netconvert gerava esta ligacao por tratar os dois
+  ramos como vias distintas (nao reconhece automaticamente como par
+  direccional da mesma avenida).
+-->
+<connections>
+    <delete from="725127419#1" to="552827132"/>
+</connections>

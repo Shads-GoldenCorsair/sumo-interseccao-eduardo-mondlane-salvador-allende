@@ -207,6 +207,69 @@ do que foi mudando e porquê.
   mesmos ficheiros `outputs/` que o baseline; não correr os auto-testes
   depois de gerar um baseline sem regerar o baseline a seguir.
 
+## 2026-09-14 — Sessão 2: correcções de geometria a partir de imagem de satélite
+
+O autor forneceu capturas de ecrã do OpenStreetMap e do Google Maps
+(satélite) do cruzamento real, e apontou 3 problemas na rede gerada.
+
+**Verificação de localização:** confirmado que a rede estava no sítio
+certo (o ponto de paragem de autocarro "Ministério da Saúde" fica a
+apenas ~27m do nosso junction, medido com `sumolib`). A suspeita inicial
+de que a localização estivesse errada não se confirmou.
+
+**Problemas reais encontrados e corrigidos:**
+
+1. **Viragem em U indevida:** a rede anterior permitia uma ligação directa
+   entre os dois ramos de sentido único de Eduardo Mondlane
+   (`725127419#1 -> 552827132`, incluída nas rotas como `EM2_uturn`). O
+   autor confirmou, por imagem de satélite, que essa viragem não é
+   fisicamente possível nesta interseccao real. O `netconvert` gerava-a
+   por tratar os dois ramos como vias distintas, não reconhece
+   automaticamente pares direccionais da mesma avenida. Corrigido com um
+   ficheiro de conexões (`net/osm_real/remover_conexoes.con.xml`,
+   elemento `<delete>`) aplicado no `netconvert`, removendo essa ligação
+   na origem. O volume de tráfego que estava atribuído a essa rota foi
+   somado à rota "EM2_straight" (ver comentário nos ficheiros de rotas).
+2. **Avenida Salvador Allende com faixas erradas:** a rede tinha 1 faixa
+   por sentido nesta via, mas a tag OSM não tinha `lanes` definida (o
+   `netconvert` assumiu 1 por omissão). A imagem de satélite mostra 2
+   faixas no mesmo sentido. Corrigido adicionando `<tag k="lanes" v="2"/>`
+   às duas vias OSM de Salvador Allende (`24769111`, `479355406`) antes de
+   reconverter com o `netconvert`.
+3. Como resultado da regeneração, os IDs de algumas arestas mudaram
+   (`552827135#1` passou a `552827135#0`, `725127419#2` passou a
+   `725127419#3`), e o ID do junction fundido passou a incluir mais dois
+   nós (`cluster_12168401392_13673178841_13673178842_1783252720`), porque
+   o `netconvert` agora funde os 4 nós próximos num só, em vez de 2.
+   Actualizados `agente_dqn/sumo_env.py` (`ARESTAS_ENTRADA`, `ID_SEMAFORO`)
+   e todos os ficheiros `routes/*.rou.xml` para os novos IDs.
+4. Rotas possíveis reduzidas de 8 para 7 (removida `EM2_uturn`).
+   `tlLogic` reconstruído com a mesma lógica de 4 fases fixas
+   (42s/3s/42s/3s), adaptada aos novos índices de ligação.
+5. Validado de novo com `sumo -c pico.sumocfg` / `baixo_fluxo.sumocfg`
+   (sem erros) e com o auto-teste de `sumo_env.py`.
+6. **Baseline remedido outra vez** com a geometria corrigida: espera média
+   **12,2s em pico** (2049 viagens), **9,8s em baixo fluxo** (224
+   viagens). O valor de baixo fluxo (9,8s) fica notavelmente próximo do
+   valor original medido na rede manual (9,6s, `CLAUDE.md`), o que reforça
+   a confiança na correcção.
+7. **Cuidado a reter, confirmado outra vez nesta sessão:** o auto-teste do
+   `sumo_env.py` voltou a sobrescrever os ficheiros de baseline de baixo
+   fluxo com uma corrida truncada (12 veículos); teve de se regerar mais
+   uma vez com `sumo -c baixo_fluxo.sumocfg`.
+
+**Ainda por verificar/decidir:**
+- O autor referiu ainda "atenção às permissões para curva dos veículos na
+  estrada" de forma geral; as ligações actuais (direita/esquerda/recto por
+  aproximação) foram revistas e parecem coerentes com a imagem de
+  satélite, mas vale a pena confirmar visualmente com `sumo-gui` antes do
+  treino completo (ver secção de teste manual, mais acima nesta conversa).
+- O treino ainda não foi corrido com esta geometria corrigida; os
+  resultados de teste de fumo anteriores (recompensas -2502/-371 etc.)
+  foram medidos com a geometria antiga (com a viragem em U e Salvador
+  Allende a 1 faixa) e não são mais representativos. Repetir o teste de
+  fumo antes do treino completo no Colab.
+
 ## Como usar este ficheiro
 
 Cada sessão de trabalho futura deve acrescentar uma secção nova aqui, com

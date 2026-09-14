@@ -15,7 +15,10 @@
   tem 3 aproximacoes, não 4. Os volumes que antes eram das aproximações Norte e
   Sul de Salvador Allende (agora uma única aproximação real, SA_in) foram somados.
   O volume que antes era "W_right" foi dobrado sobre "EM1_straight", porque essa
-  viragem à direita não existe fisicamente nesta interseccao real.
+  viragem à direita não existe fisicamente nesta interseccao real. O volume que
+  era "EM2_uturn" foi dobrado sobre "EM2_straight", porque a viragem em U entre
+  os dois ramos de Eduardo Mondlane não é fisicamente possível (confirmado por
+  imagem de satélite, ver PROGRESSO.md).
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
 
@@ -24,14 +27,13 @@
     <vType id="autocarro" vClass="bus"     length="10.0" maxSpeed="12.0" accel="1.2" decel="3.5" sigma="0.4" color="0.1,0.5,0.2"/>
     <vType id="pesado"  vClass="truck"     length="8.0" maxSpeed="12.0" accel="1.3" decel="3.5" sigma="0.5" color="0.3,0.3,0.3"/>
 
-    <route id="EM1_straight" edges="552827135#1 552827132"/>
-    <route id="EM1_left"     edges="552827135#1 24769111#11"/>
-    <route id="EM2_straight" edges="725127419#1 725127419#2"/>
+    <route id="EM1_straight" edges="552827135#0 552827132"/>
+    <route id="EM1_left"     edges="552827135#0 24769111#11"/>
+    <route id="EM2_straight" edges="725127419#1 725127419#3"/>
     <route id="EM2_right"    edges="725127419#1 24769111#11"/>
-    <route id="EM2_uturn"    edges="725127419#1 552827132"/>
     <route id="SA_straight" edges="24769111#9 24769111#11"/>
     <route id="SA_right"    edges="24769111#9 552827132"/>
-    <route id="SA_left"     edges="24769111#9 725127419#2"/>
+    <route id="SA_left"     edges="24769111#9 725127419#3"/>
 
     <!-- Eduardo Mondlane, ramo 1: fluxo dominante (via primária) -->
     <flow id="f_EM1_straight_lig" type="ligeiro"   route="EM1_straight" begin="0" end="3600" vehsPerHour="515" departLane="best"/>
@@ -41,12 +43,11 @@
     <flow id="f_EM1_left_lig"     type="ligeiro"   route="EM1_left"     begin="0" end="3600" vehsPerHour="70"  departLane="best"/>
 
     <!-- Eduardo Mondlane, ramo 2 -->
-    <flow id="f_EM2_straight_lig" type="ligeiro"   route="EM2_straight" begin="0" end="3600" vehsPerHour="390" departLane="best"/>
+    <flow id="f_EM2_straight_lig" type="ligeiro"   route="EM2_straight" begin="0" end="3600" vehsPerHour="455" departLane="best"/>
     <flow id="f_EM2_straight_cha" type="chapa"     route="EM2_straight" begin="0" end="3600" vehsPerHour="105" departLane="best"/>
     <flow id="f_EM2_straight_bus" type="autocarro" route="EM2_straight" begin="0" end="3600" vehsPerHour="16"  departLane="best"/>
     <flow id="f_EM2_pesado"       type="pesado"    route="EM2_straight" begin="0" end="3600" vehsPerHour="20"  departLane="best"/>
     <flow id="f_EM2_right_lig"    type="ligeiro"   route="EM2_right"    begin="0" end="3600" vehsPerHour="80"  departLane="best"/>
-    <flow id="f_EM2_uturn_lig"    type="ligeiro"   route="EM2_uturn"    begin="0" end="3600" vehsPerHour="65"  departLane="best"/>
 
     <!-- Salvador Allende: fluxo secundário, mas relevante (hospital, faculdade) -->
     <flow id="f_SA_straight_lig" type="ligeiro" route="SA_straight" begin="0" end="3600" vehsPerHour="350" departLane="best"/>

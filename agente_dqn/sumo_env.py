@@ -29,12 +29,12 @@ import traci  # noqa: E402
 # gerados pelo netconvert). Ver routes/routes.rou.xml para o detalhe dos
 # movimentos permitidos em cada uma.
 ARESTAS_ENTRADA = {
-    "EM1": "552827135#1",
+    "EM1": "552827135#0",
     "EM2": "725127419#1",
     "SA":  "24769111#9",
 }
 
-ID_SEMAFORO = "cluster_12168401392_1783252720"
+ID_SEMAFORO = "cluster_12168401392_13673178841_13673178842_1783252720"
 
 # Indices das fases verdes no tlLogic (net/eduardo_mondlane_salvador_allende.net.xml).
 # 0 = verde EM (42s), 1 = amarelo EM (3s), 2 = verde SA (42s), 3 = amarelo SA (3s).
