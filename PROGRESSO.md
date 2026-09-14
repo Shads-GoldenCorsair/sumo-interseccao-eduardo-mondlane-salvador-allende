@@ -648,6 +648,26 @@ colisão.
   causou a colisão); a próxima tentativa de resolver a travessia tem de
   usar `<crossing>` como está descrito aqui, não repetir a solução de
   partilha de faixa.
+
+  **Tentativa feita e sem sucesso (mesma sessão, pedido "refine"):**
+  dividida cada uma das 5 arestas junto ao cruzamento (as 3 de entrada
+  mais 2 de saída) em dois segmentos, com um novo nó e uma faixa de
+  peões dedicada só no último troço (coto) antes do semáforo, sem
+  passeio ao longo do resto da via (respeitando a correcção anterior do
+  autor). Testado com dois comprimentos de coto (5m e 12m). Em ambos os
+  casos, o `netconvert` recusou construir as passadeiras manuais
+  (`<crossing>`) com o erro **"no vehicle lanes to cross"**, apesar das
+  faixas de veículos existirem correctamente nesses segmentos (confirmado
+  por inspecção directa do XML). O comprimento do coto não foi a causa
+  (mesmo erro em 5m e 12m), o que sugere um bloqueio mais profundo, talvez
+  relacionado com a forma como o netconvert trata nós inseridos
+  manualmente tão perto de um junction já complexo (fundido de 4 nós
+  OSM). Revertido sem alterar a rede activa (ainda a versão v7, com baía
+  de autocarro, sem passadeiras). Não investigado mais fundo por questão
+  de tempo; próxima tentativa pode precisar de uma abordagem diferente
+  (ex.: pedir ajuda directa na documentação/lista de emails do SUMO, ou
+  reconstruir o junction com uma topologia mais simples antes de tentar
+  passadeiras).
 - Fluxo de peões em Salvador Allende (idem, mais o passeio incompleto
   já identificado antes).
 - Validar o resume end-to-end com uma interrupção real (kill do processo,
