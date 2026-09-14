@@ -6,5 +6,8 @@
   PROGRESSO.md.
 -->
 <additional>
-    <busStop id="paragem_ministerio_saude" lane="725127419#3_2" startPos="1.40" endPos="26.40" friendlyPos="true"/>
+    <!-- Faixa 3 de 725127419#3b e a baia de autocarro dedicada (nasce em
+         N_BAIA_INICIO, desaparece em N_BAIA_FIM), so acessivel a
+         autocarros. Ver PROGRESSO.md. -->
+    <busStop id="paragem_ministerio_saude" lane="725127419#3b_3" startPos="0" endPos="25.00" friendlyPos="true"/>
 </additional>

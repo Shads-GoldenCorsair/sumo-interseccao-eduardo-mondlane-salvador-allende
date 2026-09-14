@@ -33,13 +33,16 @@
     <route id="EM1_straight" edges="552827135#0 552827132"/>
     <route id="EM1_left"     edges="552827135#0 24769111#11"/>
 
-    <!-- A partir de Eduardo Mondlane, ramo 2 (via 725127419#1) -->
-    <route id="EM2_straight" edges="725127419#1 725127419#3"/>
+    <!-- A partir de Eduardo Mondlane, ramo 2 (via 725127419#1). A saida
+         725127419#3 foi dividida em 3 segmentos (a/b/c) para dar lugar a
+         baia de autocarro (faixa extra so em 725127419#3b), ver
+         PROGRESSO.md. -->
+    <route id="EM2_straight" edges="725127419#1 725127419#3a 725127419#3b 725127419#3c"/>
     <route id="EM2_right"    edges="725127419#1 24769111#11"/>
 
     <!-- A partir de Salvador Allende (via 24769111#9) -->
     <route id="SA_straight" edges="24769111#9 24769111#11"/>
     <route id="SA_right"    edges="24769111#9 552827132"/>
-    <route id="SA_left"     edges="24769111#9 725127419#3"/>
+    <route id="SA_left"     edges="24769111#9 725127419#3a 725127419#3b 725127419#3c"/>
 
 </routes>

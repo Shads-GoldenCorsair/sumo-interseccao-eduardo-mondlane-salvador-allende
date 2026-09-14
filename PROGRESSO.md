@@ -554,9 +554,102 @@ Baseline remedido: **12,0s pico, 9,9s baixo fluxo**.
 -468.0, -108.0, -128.0, melhora de forma consistente com a rede final
 desta sessão.
 
+## 2026-09-14 — Sessão 2: adaptação da rede de referência "antigravity sumo"
+
+O autor apontou uma pasta (`Desktop/antigravity sumo/`) com uma rede SUMO
+construída por outra ferramenta de IA (Antigravity/Gemini), em XML plano
+(nós/arestas/conexões separados), pedindo para adaptar a lógica dessa rede
+à nossa (que é georreferenciada, com coordenadas reais do OpenStreetMap; a
+de referência é esquemática, coordenadas abstractas simétricas). Adoptadas
+3 ideias, por ordem de prioridade pedida:
+
+**1. Autocarros também restritos à faixa lateral.** Já tínhamos restrito
+chapas (`disallow="taxi"`) às faixas centrais de Eduardo Mondlane; agora
+autocarros também (`disallow="... taxi bus"`), coerente com "chapas e
+machimbombos circulam exclusivamente pelas laterais" da rede de
+referência. Confirmado sem erros.
+
+**2. Baía de autocarro física, via nós de divergência/convergência.**
+Técnica adaptada da rede de referência (nós `split`/`merge` a montante e
+jusante), desta vez com sucesso (a tentativa anterior com o mecanismo
+`<split>` do netconvert tinha falhado, ver entrada anterior desta secção).
+Processo:
+- A aresta `725127419#3` (troço de saída de Eduardo Mondlane ramo 2, onde
+  fica a paragem) foi dividida manualmente em 3 arestas consecutivas
+  (`725127419#3a/b/c`), com 2 novos nós intermédios (`N_BAIA_INICIO`,
+  `N_BAIA_FIM`) posicionados exactamente na extensão da paragem real
+  (1,4-26,4m), via edição directa dos ficheiros XML planos exportados
+  (`netconvert --plain-output-prefix`).
+- O troço do meio (`725127419#3b`) ganhou uma 4.ª faixa (índice 3),
+  exclusiva a autocarros (`allow="bus"`), com ligações explícitas de
+  entrada (faixa lateral 2 diverge para a faixa 3) e saída (faixa 3
+  converge de volta para a faixa 2).
+- **Bugs próprios cometidos e corrigidos durante o processo:**
+  - O ficheiro de tipos (`.typ.xml`) exportado tinha `sidewalkWidth`
+    herdado de uma fase anterior da sessão, o que voltava a criar
+    passeio sintético em toda a Eduardo Mondlane ao reconverter. Removido
+    de todos os tipos.
+  - A faixa lateral do troço da baía (`725127419#3b`, faixa 2) tinha
+    `disallow="taxi"` por engano (devia ser só `disallow="bus"`, para
+    forçar só os autocarros para a faixa 3, sem impedir chapas de
+    continuar na lateral). Corrigido, confirmado com TraCI (autocarros
+    usam a faixa 3, chapas continuam na faixa 2).
+- Todas as rotas e ficheiros de procura que referenciavam
+  `725127419#3` foram actualizadas para `725127419#3a 725127419#3b
+  725127419#3c`. `net/paragens.add.xml` aponta agora para
+  `725127419#3b_3` (a faixa da baía).
+- A paragem de autocarro deixa de usar `parking="true"` (já não é
+  necessário, a baía física faz o mesmo de forma mais realista); esse
+  atributo pode ser removido do `<stop>`, mas foi deixado por
+  segurança (inofensivo com a baía a funcionar).
+
+**3. Peões com perfis nomeados: tentado, revertido por segurança.**
+Adicionados `vType` nomeados (`ped_idoso`, `ped_trabalho`, `ped_estudante`,
+`ped_vendedora`), inspirados na rede de referência, para reflectir o
+perfil heterogéneo da zona (hospital, faculdade, jardim infantil). Ao
+testar, **detectada uma colisão real veículo-peão** no cenário de baixo
+fluxo: sem passeio dedicado em Eduardo Mondlane (correcção legítima da
+sessão anterior), o SUMO faz o peão **andar ao longo de toda a extensão da
+faixa partilhada** (77 a 125s por travessia, não um atravessamento rápido
+perpendicular), o que aumenta muito o tempo de exposição ao trânsito e
+causou a colisão num teste. **Decisão tomada sem pedir confirmação
+prévia, por ser uma questão de segurança/correcção, não de preferência:**
+removido o `<personFlow>` de ambos os cenários; os `vType` de peões ficam
+definidos, prontos a reutilizar quando houver uma solução de travessia
+seguidamente mais rápida (precisa de infra-estrutura mínima de passadeira
+no ponto exacto do cruzamento, não `foot=yes` a percorrer a aresta
+inteira). Isto reverte a decisão anterior "peões só em EM1/EM2, sem
+Salvador Allende" para "peões suspensos em toda a rede, por agora".
+
+Validado com `sumo -c` em ambos os cenários, sem erros, sem colisões.
+Baseline: **12,0s pico, 9,9s baixo fluxo** (igual ao anterior, sem peões
+o valor não muda por essa via).
+
+**Teste de fumo confirmado** (3 episódios, baixo fluxo, rede final com
+baía de autocarro): recompensa -454.0, -74.0, -90.0, melhora de forma
+consistente.
+
+**Nota do autor sobre travessias futuras:** um peão já na passadeira tem
+prioridade sobre os veículos, mesmo com sinal verde entretanto para estes
+(os veículos esperam o peão terminar). Confirmado que é o comportamento
+nativo do `<crossing>` do SUMO; a solução a construir da próxima vez tem
+de usar esse elemento, não repetir a partilha de faixa que causou a
+colisão.
+
 **Ainda por fazer, explicitamente pendente:**
-- Fluxo de peões em Salvador Allende (fora do âmbito desta correcção,
-  decisão anterior do autor mantém-se).
+- Resolver a travessia de peões em segurança (precisa de infra-estrutura
+  de passadeira mínima e pontual, não passeio contínuo). **Requisito
+  explícito do autor:** um peão já a atravessar na passadeira tem
+  prioridade sobre os veículos, mesmo que o sinal fique verde para estes
+  entretanto (os veículos esperam o peão terminar). Isto é o
+  comportamento nativo do elemento `<crossing>` do SUMO (com prioridade
+  de cedência configurável), ao contrário da solução removida nesta
+  sessão (`foot=yes` a partilhar a faixa, sem essa prioridade e que
+  causou a colisão); a próxima tentativa de resolver a travessia tem de
+  usar `<crossing>` como está descrito aqui, não repetir a solução de
+  partilha de faixa.
+- Fluxo de peões em Salvador Allende (idem, mais o passeio incompleto
+  já identificado antes).
 - Validar o resume end-to-end com uma interrupção real (kill do processo,
   não só teste unitário das funções de guardar/carregar), idealmente numa
   máquina menos ocupada ou já no próprio Colab.

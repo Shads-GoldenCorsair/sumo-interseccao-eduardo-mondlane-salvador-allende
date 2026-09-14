@@ -27,14 +27,23 @@
     <vType id="autocarro" vClass="bus"     length="10.0" maxSpeed="12.0" accel="1.2" decel="3.5" sigma="0.4" color="0.1,0.5,0.2"/>
     <vType id="pesado"  vClass="truck"     length="8.0" maxSpeed="12.0" accel="1.3" decel="3.5" sigma="0.5" color="0.3,0.3,0.3"/>
 
+    <!-- Perfis de peoes com ritmo de marcha diferenciado, coerente com o
+         perfil de utilizacao heterogeneo da zona (hospital, faculdade de
+         medicina, jardim infantil, CLAUDE.md seccao 1). Inspirado na rede
+         de referencia em antigravity sumo/mondlane_allende.rou.xml. -->
+    <vType id="ped_idoso"     vClass="pedestrian" width="0.45" length="0.40" maxSpeed="0.95" color="0.50,0.45,0.40"/>
+    <vType id="ped_trabalho"  vClass="pedestrian" width="0.45" length="0.40" maxSpeed="1.34" color="0.15,0.40,0.80"/>
+    <vType id="ped_estudante" vClass="pedestrian" width="0.40" length="0.35" maxSpeed="1.45" color="0.95,0.95,0.98"/>
+    <vType id="ped_vendedora" vClass="pedestrian" width="0.48" length="0.45" maxSpeed="1.15" color="0.95,0.70,0.10"/>
+
     <route id="EM1_straight" edges="552827135#0 552827132"/>
     <route id="EM1_left"     edges="552827135#0 24769111#11"/>
-    <route id="EM2_straight" edges="725127419#1 725127419#3"/>
+    <route id="EM2_straight" edges="725127419#1 725127419#3a 725127419#3b 725127419#3c"/>
     <route id="EM2_right"    edges="725127419#1 24769111#11"/>
     <!-- Rota so para autocarros: para na paragem real "Ministerio da Saude"
          (net/paragens.add.xml), logo apos o cruzamento, confirmada pelo
          autor. Tempo de paragem tipico para embarque/desembarque. -->
-    <route id="EM2_straight_com_paragem" edges="725127419#1 725127419#3">
+    <route id="EM2_straight_com_paragem" edges="725127419#1 725127419#3a 725127419#3b 725127419#3c">
         <!-- parking="true": o autocarro para, mas o transito atras consegue
              ultrapassa-lo, em vez de ficar bloqueado na faixa (efeito
              pratico de uma baia de autocarro fisica, ver PROGRESSO.md). -->
@@ -42,7 +51,7 @@
     </route>
     <route id="SA_straight" edges="24769111#9 24769111#11"/>
     <route id="SA_right"    edges="24769111#9 552827132"/>
-    <route id="SA_left"     edges="24769111#9 725127419#3"/>
+    <route id="SA_left"     edges="24769111#9 725127419#3a 725127419#3b 725127419#3c"/>
 
     <!-- Eduardo Mondlane, ramo 1: fluxo dominante (via primária) -->
     <flow id="f_EM1_straight_lig" type="ligeiro"   route="EM1_straight" begin="0" end="3600" vehsPerHour="515" departLane="best"/>
@@ -64,17 +73,13 @@
     <flow id="f_SA_right_lig"    type="ligeiro" route="SA_right"    begin="0" end="3600" vehsPerHour="115" departLane="best"/>
     <flow id="f_SA_left_lig"     type="ligeiro" route="SA_left"     begin="0" end="3600" vehsPerHour="85"  departLane="best"/>
 
-    <!-- Peoes a atravessar Eduardo Mondlane junto ao cruzamento, usando as
-         passadeiras reais (net/eduardo_mondlane_salvador_allende.net.xml,
-         ver PROGRESSO.md). So EM1/EM2 por agora: a rede de passeios de
-         Salvador Allende ainda nao esta completa o suficiente para uma
-         travessia fiavel ai. Volume estimado, zona com hospital, faculdade
-         de medicina e jardim infantil (CLAUDE.md, seccao 1). -->
-    <personFlow id="pf_em1_para_em2" begin="0" end="3600" vehsPerHour="40">
-        <walk from="552827135#0" to="725127419#3"/>
-    </personFlow>
-    <personFlow id="pf_em2_para_em1" begin="0" end="3600" vehsPerHour="40">
-        <walk from="725127419#1" to="552827132"/>
-    </personFlow>
+    <!-- Fluxo de peoes REMOVIDO nesta sessao: sem passeio dedicado em
+         Eduardo Mondlane (correccao do autor, ver PROGRESSO.md), o SUMO
+         faz o peao andar ao LONGO da faixa partilhada (77-125s por
+         travessia, nao um atravessamento rapido), o que causou uma
+         colisao real com um veiculo num teste. Os perfis de peao
+         (ped_idoso etc.) ficam definidos para reutilizar quando houver
+         uma solucao de travessia segura (precisa de infra-estrutura
+         minima de passadeira, nao so foot=yes). Ver PROGRESSO.md.-->
 
 </routes>
