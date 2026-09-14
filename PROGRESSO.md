@@ -314,7 +314,50 @@ garantido; sem checkpoint, uma sessão de horas perdia-se toda.
   checkpoint), baseline regenerado mais uma vez sem alteração dos
   números (12,2s pico, 9,8s baixo fluxo).
 
+## 2026-09-14 — Sessão 2: 3.ª faixa de Eduardo Mondlane e paragem de autocarro
+
+O autor forneceu um rabisco à mão do cruzamento real, com mais 2
+observações:
+
+1. **Afunilamento indevido:** a aresta `552827132` (um dos troços de saída
+   de Eduardo Mondlane) tinha só 2 faixas, enquanto o resto da avenida tem
+   3 em ambos os sentidos, sem afunilar. A tag OSM não tinha `lanes`
+   definida nesta via (tal como aconteceu com Salvador Allende), o
+   `netconvert` assumiu 2 por omissão. Corrigido da mesma forma, com
+   `<tag k="lanes" v="3"/>` adicionada à via OSM antes de reconverter.
+2. **Paragem de autocarro logo após a curva:** o autor confirmou
+   visualmente uma paragem nesse ponto. Ao pedir ao `netconvert` os pontos
+   de paragem reais do OpenStreetMap (opção `ptstop-output`), confirmou-se
+   uma paragem real, tagged no OSM, exactamente na aresta
+   `725127419#3` ("Ministério da Saúde"), 1,4-26,4m do cruzamento, coerente
+   com o rabisco. Adicionada como `net/paragens.add.xml`, ligada aos dois
+   `.sumocfg`. O fluxo de autocarros do cenário de pico que passa por essa
+   aresta (`f_EM2_straight_bus`) foi alterado para parar lá 20s (tempo
+   típico de embarque/desembarque), via uma rota dedicada
+   (`EM2_straight_com_paragem`) só para não obrigar ligeiros/chapas/pesados
+   a parar também.
+
+**Simplificação deliberada, não implementada:** o rabisco mostra também
+que as faixas laterais de Eduardo Mondlane estão separadas por um passeio/
+separador físico com aberturas pontuais para mudar de faixa (visível nas
+zonas tracejadas do desenho). Isto **não foi modelado** na rede SUMO: as 3
+faixas de cada sentido estão representadas como um bloco uniforme, sem essa
+micro-geometria do separador. Motivo: o estado do agente agrega fila e
+espera por aresta inteira, não por faixa individual, por isso este detalhe
+não muda a formulação nem, provavelmente, os resultados agregados de forma
+relevante para um protótipo de licenciatura; modelar isso exigiria edição
+manual bem mais fina da rede (separar em mais vias/pistas ligadas por
+conectores). Sinalizado ao autor, não implementado sem confirmação
+explícita de que vale o esforço adicional.
+
+Validado com `sumo -c pico.sumocfg` / `baixo_fluxo.sumocfg` e com os
+auto-testes de `sumo_env.py`/`dqn_agent.py`, sem erros. Baseline remedido:
+**11,5s pico** (melhorou face aos 12,2s anteriores, plausível dado o
+reforço de capacidade de 2 para 3 faixas), **9,9s baixo fluxo** (~igual).
+
 **Ainda por verificar/decidir:**
+- Confirmar com o autor se a simplificação do separador físico de
+  Eduardo Mondlane precisa mesmo de ser modelada, ou se fica como está.
 - Validar o resume end-to-end com uma interrupção real (kill do processo,
   não só teste unitário das funções de guardar/carregar), idealmente numa
   máquina menos ocupada ou já no próprio Colab.

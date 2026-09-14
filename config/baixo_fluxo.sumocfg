@@ -3,6 +3,7 @@
     <input>
         <net-file value="../net/eduardo_mondlane_salvador_allende.net.xml"/>
         <route-files value="../routes/demanda_baixo_fluxo.rou.xml"/>
+        <additional-files value="../net/paragens.add.xml"/>
     </input>
     <time>
         <begin value="0"/>

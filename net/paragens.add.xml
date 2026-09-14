@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Paragem de autocarro real, extraida do OpenStreetMap via netconvert
+  (opcao ptstop-output), confirmada pelo autor por observacao directa
+  (rabisco da interseccao, logo apos a curva em Eduardo Mondlane). Ver
+  PROGRESSO.md.
+-->
+<additional>
+    <busStop id="paragem_ministerio_saude" lane="725127419#3_0" startPos="1.40" endPos="26.40" friendlyPos="true"/>
+</additional>

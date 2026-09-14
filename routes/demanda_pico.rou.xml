@@ -31,6 +31,12 @@
     <route id="EM1_left"     edges="552827135#0 24769111#11"/>
     <route id="EM2_straight" edges="725127419#1 725127419#3"/>
     <route id="EM2_right"    edges="725127419#1 24769111#11"/>
+    <!-- Rota so para autocarros: para na paragem real "Ministerio da Saude"
+         (net/paragens.add.xml), logo apos o cruzamento, confirmada pelo
+         autor. Tempo de paragem tipico para embarque/desembarque. -->
+    <route id="EM2_straight_com_paragem" edges="725127419#1 725127419#3">
+        <stop busStop="paragem_ministerio_saude" duration="20"/>
+    </route>
     <route id="SA_straight" edges="24769111#9 24769111#11"/>
     <route id="SA_right"    edges="24769111#9 552827132"/>
     <route id="SA_left"     edges="24769111#9 725127419#3"/>
@@ -45,7 +51,7 @@
     <!-- Eduardo Mondlane, ramo 2 -->
     <flow id="f_EM2_straight_lig" type="ligeiro"   route="EM2_straight" begin="0" end="3600" vehsPerHour="455" departLane="best"/>
     <flow id="f_EM2_straight_cha" type="chapa"     route="EM2_straight" begin="0" end="3600" vehsPerHour="105" departLane="best"/>
-    <flow id="f_EM2_straight_bus" type="autocarro" route="EM2_straight" begin="0" end="3600" vehsPerHour="16"  departLane="best"/>
+    <flow id="f_EM2_straight_bus" type="autocarro" route="EM2_straight_com_paragem" begin="0" end="3600" vehsPerHour="16"  departLane="best"/>
     <flow id="f_EM2_pesado"       type="pesado"    route="EM2_straight" begin="0" end="3600" vehsPerHour="20"  departLane="best"/>
     <flow id="f_EM2_right_lig"    type="ligeiro"   route="EM2_right"    begin="0" end="3600" vehsPerHour="80"  departLane="best"/>
 

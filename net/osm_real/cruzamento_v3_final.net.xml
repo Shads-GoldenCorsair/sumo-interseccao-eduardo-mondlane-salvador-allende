@@ -1227,10 +1227,12 @@
     </edge>
 
     <tlLogic id="cluster_12168401392_13673178841_13673178842_1783252720" type="static" programID="0" offset="0">
-        <phase duration="42" state="rrrrrGGGggGGG"/>
-        <phase duration="3"  state="rrrrryyyyyyyy"/>
-        <phase duration="42" state="GGGGGrrrrrrrr"/>
-        <phase duration="3"  state="yyyyyrrrrrrrr"/>
+        <phase duration="36" state="rrrrrGGGggGGG"/>
+        <phase duration="4"  state="rrrrryyyggyyy"/>
+        <phase duration="6"  state="rrrrrrrrgGrrr"/>
+        <phase duration="4"  state="rrrrrrrryyrrr"/>
+        <phase duration="36" state="GGGGGrrrrrrrr"/>
+        <phase duration="4"  state="yyyyyrrrrrrrr"/>
     </tlLogic>
 
     <junction id="10316210514" type="dead_end" x="301.53" y="1379.23" incLanes="4360405#5_0" intLanes="" shape="302.80,1378.25 300.26,1380.21"/>
