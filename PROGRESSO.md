@@ -767,6 +767,28 @@ faixas central/lateral, baía de autocarro, passadeiras), não a sua
 geometria exacta. Isto precisa de ser reflectido no texto do Capítulo III
 quando for escrito, com a devida honestidade sobre a origem da rede.
 
+## 2026-09-14 — Sessão 2: corrigido notebook do Colab, pronto para treino
+
+Ao rever o `treino_colab.ipynb` antes de avançar para o treino, encontrado
+um problema real: edições anteriores tinham deixado a secção "5. Treinar"
+**duplicada** (uma versão actualizada com ligação ao Drive, e uma versão
+antiga e desactualizada por baixo, sem `-u` e com texto a dizer "não há
+checkpoint automático ainda", que já não era verdade). A célula que liga
+ao Google Drive também tinha perdido o conteúdo nalguma edição anterior
+(ficou com o comando de treino em vez do código de montagem do Drive).
+Reescrito o notebook inteiro de uma vez (edições célula-a-célula estavam a
+ter efeitos inesperados nos IDs), confirmado JSON válido.
+
+**O notebook está pronto, mas eu não consigo lançá-lo** — corre no browser
+da conta Google do autor, precisa do token pessoal do GitHub colado à mão,
+sem acesso a partir daqui. Passos que o autor ainda tem de fazer:
+1. Abrir `treino_colab.ipynb` no Google Colab.
+2. Correr as células por ordem (a 2 pede o token do GitHub, a 4b pede
+   autorização do Drive).
+3. `EPISODIOS = 20` fica como está para o primeiro teste; confirmar que
+   corre até ao fim antes de subir para 100 (valor de trabalho, ver
+   secção "checkpoint/resume" mais acima).
+
 ## Como usar este ficheiro
 
 Cada sessão de trabalho futura deve acrescentar uma secção nova aqui, com
