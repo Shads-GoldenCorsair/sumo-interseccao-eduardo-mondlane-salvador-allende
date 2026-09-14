@@ -8,3 +8,4 @@ outputs/treino_*.csv
 net/osm_real/*.osm.xml
 .claude/
 agente_dqn/*.log
+outputs/_treino_scratch/

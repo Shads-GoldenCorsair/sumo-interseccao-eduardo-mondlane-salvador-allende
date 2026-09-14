@@ -258,6 +258,27 @@ de que a localização estivesse errada não se confirmou.
    fluxo com uma corrida truncada (12 veículos); teve de se regerar mais
    uma vez com `sumo -c baixo_fluxo.sumocfg`.
 
+**Teste de fumo repetido com a geometria corrigida** (3 episódios, baixo
+fluxo): recompensa -410.0, -111.0, -81.0, melhora de forma consistente,
+agente continua a funcionar bem.
+
+**Problema estrutural encontrado e corrigido:** o `train.py` usa TraCI com
+o mesmo `.sumocfg` que define os ficheiros de saída do baseline
+(`tripinfo_*.xml`, `resumo_*.xml`, `filas_*.xml`), e o SUMO escreve esses
+ficheiros também quando controlado via TraCI. Cada episódio de treino
+estava a sobrescrever o baseline com os resultados desse episódio (que
+nem sequer usa a lógica de tempo fixo, usa as decisões do agente). Isto já
+tinha acontecido sem eu notar logo (o baseline "remedido" documentado mais
+acima, 12.2s/9.8s, media na verdade uma mistura de baseline com uma
+corrida de treino truncada). Corrigido em `sumo_env.py`: o `AmbienteSumo`
+agora redirecciona esses 3 ficheiros de saída para
+`outputs/_treino_scratch/` (na `.gitignore`, descartável) sempre que liga
+o TraCI, nunca mais toca nos ficheiros de baseline reais. Baseline
+confirmado de novo após a correcção: **12,2s pico, 9,8s baixo fluxo**
+(números não mudaram, a corrida truncada anterior por coincidência não
+tinha alterado a média o suficiente para notar sem verificar o
+`n` de viagens).
+
 **Ainda por verificar/decidir:**
 - O autor referiu ainda "atenção às permissões para curva dos veículos na
   estrada" de forma geral; as ligações actuais (direita/esquerda/recto por

@@ -65,7 +65,22 @@ class AmbienteSumo:
     def reset(self):
         if self._ligado:
             traci.close()
-        traci.start([self.sumo_bin, "-c", self.caminho_sumocfg, "--no-step-log", "true", "--no-warnings", "true"])
+        # Redirecciona os ficheiros de saida (tripinfo/resumo/filas)
+        # configurados no .sumocfg para uma pasta de scratch: sao os mesmos
+        # caminhos usados para o baseline de tempo fixo, e o treino
+        # sobrescrevia-os a cada episodio (ver PROGRESSO.md). O treino nao
+        # precisa destes ficheiros, so das recompensas que ja calcula via
+        # TraCI; ficam reutilizados (sobrescritos) a cada episodio de
+        # propósito, sao so descartaveis.
+        pasta_scratch = os.path.join(os.path.dirname(__file__), "..", "outputs", "_treino_scratch")
+        os.makedirs(pasta_scratch, exist_ok=True)
+        traci.start([
+            self.sumo_bin, "-c", self.caminho_sumocfg,
+            "--no-step-log", "true", "--no-warnings", "true",
+            "--tripinfo-output", os.path.join(pasta_scratch, "tripinfo.xml"),
+            "--summary-output", os.path.join(pasta_scratch, "resumo.xml"),
+            "--queue-output", os.path.join(pasta_scratch, "filas.xml"),
+        ])
         self._ligado = True
         return self._obter_estado()
 
