@@ -1140,8 +1140,8 @@
     </edge>
     <edge id="552827139#1" from="13673178859" to="1681862231" name="Avenida Eduardo Mondlane" priority="12" type="highway.primary" spreadType="center">
         <lane id="552827139#1_0" index="0" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="89.17" shape="756.75,1046.18 681.20,1093.53"/>
-        <lane id="552827139#1_1" index="1" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="89.17" shape="755.05,1043.47 679.50,1090.81"/>
-        <lane id="552827139#1_2" index="2" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="89.17" shape="753.36,1040.76 677.80,1088.10"/>
+        <lane id="552827139#1_1" changeLeft="bicycle" index="1" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="89.17" shape="755.05,1043.47 679.50,1090.81"/>
+        <lane id="552827139#1_2" changeRight="bicycle" index="2" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="89.17" shape="753.36,1040.76 677.80,1088.10"/>
     </edge>
     <edge id="552827143#1" from="1681862217" to="13673178859" name="Avenida Eduardo Mondlane" priority="12" type="highway.primary" spreadType="center" shape="801.02,1015.02 788.21,1022.70 757.10,1042.19">
         <lane id="552827143#1_0" index="0" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="43.22" shape="797.66,1020.77 789.88,1025.43 760.99,1043.53"/>
@@ -1211,8 +1211,8 @@
     </edge>
     <edge id="725127420#4" from="13673178839" to="2504259089" name="Avenida Eduardo Mondlane" priority="12" type="highway.primary" spreadType="center" shape="297.70,1342.27 311.03,1334.01 453.26,1246.98">
         <lane id="725127420#4_0" index="0" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="175.37" shape="298.02,1338.31 309.35,1331.29 447.58,1246.70"/>
-        <lane id="725127420#4_1" index="1" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="175.37" shape="299.70,1341.03 311.03,1334.01 449.25,1249.43"/>
-        <lane id="725127420#4_2" index="2" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="175.37" shape="301.39,1343.75 312.71,1336.73 450.92,1252.16"/>
+        <lane id="725127420#4_1" changeLeft="bicycle" index="1" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="175.37" shape="299.70,1341.03 311.03,1334.01 449.25,1249.43"/>
+        <lane id="725127420#4_2" changeRight="bicycle" index="2" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="175.37" shape="301.39,1343.75 312.71,1336.73 450.92,1252.16"/>
     </edge>
     <edge id="725363795#1" from="9277390303" to="cluster_13673178856_13673178857_1681862239_21675036" name="Avenida Eduardo Mondlane" priority="12" type="highway.primary" spreadType="center" shape="824.79,1018.48 971.14,929.66">
         <lane id="725363795#1_0" index="0" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="16.67" length="173.47" shape="826.20,1013.88 974.49,923.88"/>

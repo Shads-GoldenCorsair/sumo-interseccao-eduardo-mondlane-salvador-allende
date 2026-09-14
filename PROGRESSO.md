@@ -355,9 +355,60 @@ auto-testes de `sumo_env.py`/`dqn_agent.py`, sem erros. Baseline remedido:
 **11,5s pico** (melhorou face aos 12,2s anteriores, plausível dado o
 reforço de capacidade de 2 para 3 faixas), **9,9s baixo fluxo** (~igual).
 
+## 2026-09-14 — Sessão 2: separador físico modelado, estado passa a ser por faixa
+
+O autor confirmou (explicitamente) que o separador físico deve ser
+modelado, e que o estado do agente deve olhar por faixa, não por via
+inteira.
+
+**Modelação do separador físico:** implementado com os atributos nativos
+do SUMO `changeLeft`/`changeRight` ao nível da faixa (não existe forma de
+"desligar" mudança de faixa por completo, o valor tem de ser uma lista de
+classes de veículo permitidas; usou-se `"bicycle"`, que exclui todos os 4
+tipos de veículo do projecto). Testado à parte antes de aplicar à rede
+real (rede minúscula de teste, 3 faixas, veículos a tentar forçar mudança
+de faixa via TraCI) porque a primeira tentativa tinha a direcção dos
+atributos trocada (`changeLeft` bloqueia o movimento da faixa DE origem
+PARA a esquerda, não da direita para essa faixa) e não bloqueava nada.
+Confirmada a combinação correcta antes de tocar na rede real.
+
+Aplicado às duas vias a montante das arestas de entrada (as arestas
+directamente incidentes ao cruzamento ficam como zona de abertura/fusão,
+coerente com o rabisco do autor):
+- `552827139#1` (a montante de EM1_in)
+- `725127420#4` (a montante de EM2_in)
+
+Em cada uma, a faixa 2 (mais a esquerda no sentido de marcha, a de acesso
+local/paragem) fica impedida de mudar para a faixa 1, e vice-versa; as
+faixas 0 e 1 (centrais) continuam livres entre si.
+
+**Simplificação retida:** não foram modeladas aberturas pontuais ao longo
+destas vias a montante (dados reais sobre a posição exacta de cada
+abertura não estao disponiveis); a via a montante fica totalmente fechada
+entre a faixa de acesso e as centrais, com a abertura a acontecer só na
+transição para a aresta seguinte (a de entrada no cruzamento, já sem
+restrição). Isto é uma aproximação razoável dada a escala da rede
+modelada (poucas centenas de metros), não uma reconstrução exacta de cada
+abertura do passeio.
+
+**Estado do agente passa a ser por faixa:** vector de estado de 7 para
+**17** valores (8 faixas x [fila, espera] + fase actual). `sumo_env.py`
+usa agora `traci.lane.getLastStepHaltingNumber`/`getWaitingTime` por
+faixa em vez de `traci.edge.*` por via inteira. `dqn_agent.py`:
+`TAMANHO_ESTADO` actualizado para 17. A recompensa continua a ser
+`-soma(esperas)`, agora somada por faixa em vez de por via (matematicamente
+equivalente, a soma e a mesma).
+
+Validado com `sumo -c` em ambos os cenários e com os auto-testes de
+`sumo_env.py`/`dqn_agent.py` (confirmam 17 valores). **Teste de fumo
+confirmado** (3 episódios, baixo fluxo): recompensa -425.0, -62.0, -103.0,
+melhora de forma consistente, agente continua a aprender bem com o estado
+de 17 valores e a rede com restrição de faixas.
+
+`treino_colab.ipynb`: `EPISODIOS` por omissão passou de 100 para **20**,
+para o primeiro teste do autor ser mais curto (confirmado explicitamente).
+
 **Ainda por verificar/decidir:**
-- Confirmar com o autor se a simplificação do separador físico de
-  Eduardo Mondlane precisa mesmo de ser modelada, ou se fica como está.
 - Validar o resume end-to-end com uma interrupção real (kill do processo,
   não só teste unitário das funções de guardar/carregar), idealmente numa
   máquina menos ocupada ou já no próprio Colab.

@@ -9,7 +9,7 @@ from collections import deque
 import numpy as np
 from tensorflow import keras
 
-TAMANHO_ESTADO = 7
+TAMANHO_ESTADO = 17  # 8 faixas x (fila + espera) + fase actual, ver sumo_env.py
 NUM_ACCOES = 2
 TAMANHO_BUFFER = 10000
 ACTUALIZAR_REDE_ALVO_CADA = 5  # episodios

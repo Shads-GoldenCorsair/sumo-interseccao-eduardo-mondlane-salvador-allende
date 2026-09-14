@@ -7,12 +7,17 @@ Eduardo Mondlane, neste troco, e um par de vias de sentido unico (ver
 PROGRESSO.md, seccao 2026-09-13, Fase 0, para o detalhe desta decisao,
 tomada em conjunto com o autor).
 
-Espaco de estados: vector de 7 valores
-    [fila_EM1, fila_EM2, fila_SA, espera_EM1, espera_EM2, espera_SA, fase_actual]
+Espaco de estados: vector de 17 valores, um por FAIXA (nao por via inteira,
+decisao do autor: a Avenida Eduardo Mondlane tem uma faixa de acesso local
+separada das faixas centrais por um separador fisico com poucas aberturas,
+ver PROGRESSO.md), mais a fase:
+    [fila_faixa_1, ..., fila_faixa_8, espera_faixa_1, ..., espera_faixa_8, fase_actual]
+As 8 faixas sao, por ordem: EM1 (3 faixas), EM2 (3 faixas), SA (2 faixas),
+ver FAIXAS_ENTRADA abaixo para a ordem exacta e os IDs nativos.
 Espaco de accoes: discreto, 2 valores
     0 = manter a fase actual
     1 = mudar de fase
-Recompensa: negativo da soma dos tempos de espera nas 3 aproximacoes,
+Recompensa: negativo da soma dos tempos de espera em todas as faixas,
 menos uma penalizacao de 5.0 se a accao mudou de fase.
 """
 
@@ -33,6 +38,19 @@ ARESTAS_ENTRADA = {
     "EM2": "725127419#1",
     "SA":  "24769111#9",
 }
+
+# Numero de faixas de cada aresta de entrada (net/eduardo_mondlane_salvador_allende.net.xml).
+NUM_FAIXAS = {"552827135#0": 3, "725127419#1": 3, "24769111#9": 2}
+
+# Faixas de cada aresta de entrada, por ordem (indice 0 = mais a direita no
+# sentido de marcha). O estado observa por faixa, nao por via inteira,
+# porque a Avenida Eduardo Mondlane tem uma faixa de acesso local separada
+# das centrais por um separador fisico (ver PROGRESSO.md).
+FAIXAS_ENTRADA = [
+    f"{aresta}_{i}"
+    for aresta in ARESTAS_ENTRADA.values()
+    for i in range(NUM_FAIXAS[aresta])
+]
 
 ID_SEMAFORO = "cluster_12168401392_13673178841_13673178842_1783252720"
 
@@ -115,8 +133,8 @@ class AmbienteSumo:
         return proximo_estado, recompensa, terminado
 
     def _obter_estado(self):
-        filas = [traci.edge.getLastStepHaltingNumber(a) for a in ARESTAS_ENTRADA.values()]
-        esperas = [traci.edge.getWaitingTime(a) for a in ARESTAS_ENTRADA.values()]
+        filas = [traci.lane.getLastStepHaltingNumber(f) for f in FAIXAS_ENTRADA]
+        esperas = [traci.lane.getWaitingTime(f) for f in FAIXAS_ENTRADA]
         fase = traci.trafficlight.getPhase(ID_SEMAFORO)
         # Normaliza a fase para 0 (grupo EM) ou 1 (grupo SA), ignorando o
         # sub-estado amarelo transitorio, para manter o valor coerente com
@@ -125,7 +143,7 @@ class AmbienteSumo:
         return filas + esperas + [fase_normalizada]
 
     def _calcular_recompensa(self, mudou_fase):
-        esperas = [traci.edge.getWaitingTime(a) for a in ARESTAS_ENTRADA.values()]
+        esperas = [traci.lane.getWaitingTime(f) for f in FAIXAS_ENTRADA]
         recompensa = -sum(esperas)
         if mudou_fase:
             recompensa -= PENALIZACAO_MUDANCA_FASE
@@ -138,14 +156,15 @@ def demo():
     caminho = os.path.join(os.path.dirname(__file__), "..", "config", "baixo_fluxo.sumocfg")
     ambiente = AmbienteSumo(caminho)
     estado = ambiente.reset()
-    assert len(estado) == 7, f"estado devia ter 7 valores, tem {len(estado)}"
+    tamanho_esperado = 2 * len(FAIXAS_ENTRADA) + 1
+    assert len(estado) == tamanho_esperado, f"estado devia ter {tamanho_esperado} valores, tem {len(estado)}"
     for i in range(20):
         _, recompensa, terminado = ambiente.step(i % 2)
         assert isinstance(recompensa, float) or isinstance(recompensa, int)
         if terminado:
             break
     ambiente.fechar()
-    print("demo() ok: estado com 7 valores, step() funcional.")
+    print(f"demo() ok: estado com {tamanho_esperado} valores, step() funcional.")
 
 
 if __name__ == "__main__":
