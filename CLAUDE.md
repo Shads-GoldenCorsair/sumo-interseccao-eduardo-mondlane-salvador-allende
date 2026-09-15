@@ -51,8 +51,8 @@ classificação ou regressão.
 | Componente | Decisão |
 |---|---|
 | Simulador | SUMO (Simulation of Urban Mobility), via interface TraCI |
-| Algoritmo | Deep Q-Network (DQN) — Mnih et al. (2015) |
-| Alternativa considerada | PPO (mais estável, mas mais complexo de afinar) — não implementar agora, só se o DQN se mostrar instável |
+| Algoritmo principal | Deep Q-Network (DQN) — Mnih et al. (2015) |
+| Algoritmos de comparação (decisão explícita do autor, 2026-09-15) | Q-learning tabular, PPO e A2C (`stable-baselines3`), treinados no mesmo ambiente/estado/acção/recompensa, ver `algoritmos_comparacao/`. Objectivo: comparar e escolher o de melhor resultado. Muda a arquitectura fechada original (que previa só DQN); ainda por reflectir nos Capítulos II e IV depois dos resultados finais |
 | Linguagem | Python 3 |
 | Framework de ML | TensorFlow / Keras |
 | Espaço de estados | Vector de 17 valores: fila + tempo de espera por FAIXA (não por via inteira, 8 faixas nas 5 aproximações) + 1 fase actual do semáforo. Era 9/4-aproximações no plano inicial; alterado com aprovação explícita do autor à medida que o modelo da via ficou mais fiel à realidade (histórico completo em PROGRESSO.md) |

@@ -878,6 +878,66 @@ a nota de que a média/desvio-padrão entre as 5 sementes (exigida pelo
 `CLAUDE.md`, secção 3) ainda precisa de ser calculada à mão depois de
 todas as sementes estarem treinadas e avaliadas.
 
+## 2026-09-15 — Sessão 3: algoritmos de comparação (Q-learning, PPO, A2C)
+
+O autor pediu para comparar o DQN com outros algoritmos e escolher o de
+melhor resultado. Isto muda a arquitectura fechada do `CLAUDE.md`
+(secção 3, "não mudar sem justificação forte"), por isso parei e
+confirmei o âmbito antes de avançar (pergunta feita, respondida
+explicitamente): algoritmos de RL a sério (não só baselines não-RL do
+SUMO), usando `stable-baselines3` em vez de implementar PPO/A2C à mão
+(implementar PPO correctamente à mão tem muitos detalhes subtis, risco
+de bugs que invalidam a comparação). Algoritmos escolhidos: Q-learning
+tabular (pedido à parte pelo autor, depois da primeira pergunta), PPO, e
+A2C.
+
+**Nova pasta `algoritmos_comparacao/`** (separada de `agente_dqn/`,
+pedido explícito do autor):
+- `qlearning_agent.py` — Q-learning tabular. O estado do ambiente
+  continua a ser o vector de 17 valores (não mudou o `sumo_env.py`), mas
+  uma tabela não aguenta essa dimensão, por isso este agente agrega o
+  estado em 3 números discretos (fila total, espera total, fase) antes
+  de o usar como chave. É uma limitação conhecida dos métodos tabulares,
+  documentada, não uma redefinição do problema.
+- `treinar_qlearning.py` — mesma interface/formato de CSV que
+  `agente_dqn/train.py`.
+- `sumo_gym_env.py` — adapta `AmbienteSumo` à interface `gymnasium.Env`
+  exigida pelo `stable-baselines3`.
+- `treinar_ppo_a2c.py` — treina PPO ou A2C.
+- `comparar_algoritmos.py` — gráfico com os 4 algoritmos juntos, diz
+  qual teve melhor recompensa no último episódio.
+
+**Bug real encontrado e corrigido ao testar o PPO:** os primeiros testes
+pareciam mostrar episódios a terminar muito mais cedo do que deviam
+(327s em vez de ~3600s). Investigação: isolei o wrapper Gym sem o
+`stable-baselines3` (confirmou 724 passos até terminar, correcto);
+o problema era o PPO recolher por omissão 2048 passos antes de
+actualizar a política, mais do que um episódio inteiro (~720 passos),
+cortando episódios a meio de forma inesperada. Corrigido com
+`n_steps=720` (igual à duração de um episódio). Depois de corrigir,
+confirmei que o CSV ficava com exactamente o número certo de linhas,
+sem entradas falsas; a confusão inicial sobre "327s" era só ordenação
+de mensagens em buffer, não um bug real nos dados.
+
+**Validado:** auto-teste do Q-learning, treino real curto de cada um dos
+3 algoritmos (2-3 episódios, localmente), e o gráfico de comparação, com
+dados reais dos 3 (o DQN já tinha dados do Colab). Sem erros.
+
+**Acidente evitado:** ao limpar ficheiros de teste, apaguei por engano
+`outputs/treino_baixo_fluxo.csv`, que continha o resultado real do
+primeiro treino do DQN no Colab (não um ficheiro de teste). Recuperado
+com `git checkout` (estava commitado). Cuidado a reter: os nomes dos
+CSVs de teste e dos resultados reais são muito parecidos, confirmar
+sempre antes de apagar em lote.
+
+**Pendente:**
+- Treinar as 5 sementes × 100 episódios de cada algoritmo novo (Q-learning,
+  PPO, A2C), para os 2 cenários, tal como já está a acontecer com o DQN.
+- Depois de todos terminados, `comparar_algoritmos.py` para decidir qual
+  fica na tese como algoritmo principal.
+- Actualizar Capítulos II e IV com a comparação, só depois dos resultados
+  finais e com confirmação do autor (regra do `CLAUDE.md`, secção 8/9).
+
 ## Como usar este ficheiro
 
 Cada sessão de trabalho futura deve acrescentar uma secção nova aqui, com
