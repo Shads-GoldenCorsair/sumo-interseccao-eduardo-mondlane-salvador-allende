@@ -19,6 +19,11 @@ Guarda um checkpoint (pesos da rede + progresso) a cada CHECKPOINT_CADA
 episodios em outputs/_checkpoints/. Se a execucao for interrompida (ex.:
 o Colab desliga a sessao), correr o mesmo comando outra vez retoma a
 partir do ultimo checkpoint em vez de recomecar do zero.
+
+Quando uma semente termina o treino todo, o modelo final fica gravado em
+outputs/modelos_treinados/<cenario>_semente<N>.weights.h5 (nao e apagado
+como o checkpoint de progresso). Usar avaliar_agente.py para carregar esse
+modelo e medir o desempenho real, sem exploracao aleatoria.
 """
 
 import argparse
@@ -32,6 +37,7 @@ from sumo_env import AmbienteSumo
 
 RAIZ = os.path.dirname(__file__)
 PASTA_CHECKPOINTS = os.path.join(RAIZ, "..", "outputs", "_checkpoints")
+PASTA_MODELOS = os.path.join(RAIZ, "..", "outputs", "modelos_treinados")
 CHECKPOINT_CADA = 10  # episodios
 
 
@@ -103,7 +109,11 @@ def treinar_uma_semente(caminho_sumocfg, cenario, semente, num_episodios, caminh
 
     ambiente.fechar()
 
-    # Treino desta semente completo: remove o checkpoint (ja nao e preciso retomar).
+    # Treino desta semente completo: guarda o modelo final num sitio
+    # permanente (para avaliar depois, ver avaliar_agente.py), e remove o
+    # checkpoint de progresso (ja nao e preciso retomar).
+    os.makedirs(PASTA_MODELOS, exist_ok=True)
+    agente.guardar_pesos(os.path.join(PASTA_MODELOS, f"{cenario}_semente{semente}.weights.h5"))
     for caminho in (caminho_pesos, caminho_progresso):
         if os.path.exists(caminho):
             os.remove(caminho)

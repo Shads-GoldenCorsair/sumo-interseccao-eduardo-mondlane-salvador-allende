@@ -846,6 +846,38 @@ script de avaliação final (carregar pesos treinados, correr com
 `epsilon=0`, medir espera média real, comparar com o baseline). Próximo
 passo lógico depois do treino completo terminar.
 
+## 2026-09-15 — Sessão 3: script de avaliação final, treino no Colab em curso
+
+Enquanto o autor deixava o treino real a correr no Colab (5 sementes ×
+100 episódios, baixo fluxo, numa só sessão sequencial), pediu um script
+para ver o agente treinado a decidir (visualmente, no `sumo-gui`) e para
+comparar o desempenho real com o baseline.
+
+**Falha encontrada ao preparar isto:** o `train.py` apagava os pesos
+treinados assim que uma semente terminava (só existiam como checkpoint
+para retomar, nunca ficavam guardados de forma permanente). Corrigido:
+ao terminar uma semente, o modelo final fica gravado em
+`outputs/modelos_treinados/<cenario>_semente<N>.weights.h5`, só o
+progresso de retoma é que continua a ser apagado.
+
+**Novo:** `agente_dqn/avaliar_agente.py`. Carrega um modelo treinado,
+corre um episódio completo com `epsilon=0` (sem exploração aleatória, só
+decisões "a sério"), e compara a espera média resultante com o baseline
+(lido de `outputs/tripinfo_<cenario>.xml`). Aceita `--gui` para ver o
+agente a decidir ao vivo (só localmente, o Colab não tem ecrã).
+
+Testado localmente com um treino rápido de 3 episódios (só para validar o
+pipeline, não é um resultado real): recompensa -1618, espera média do
+agente 4,9s contra 14,4s do baseline. **Importante, sinalizado ao autor:**
+este número não significa nada ainda, é só a confirmação de que o
+mecanismo de carregar pesos e avaliar funciona; com 3 episódios de treino
+o agente ainda não aprendeu nada de útil.
+
+`RELATORIO_RESULTADOS.md` actualizado com a secção 4.5 (como avaliar) e
+a nota de que a média/desvio-padrão entre as 5 sementes (exigida pelo
+`CLAUDE.md`, secção 3) ainda precisa de ser calculada à mão depois de
+todas as sementes estarem treinadas e avaliadas.
+
 ## Como usar este ficheiro
 
 Cada sessão de trabalho futura deve acrescentar uma secção nova aqui, com

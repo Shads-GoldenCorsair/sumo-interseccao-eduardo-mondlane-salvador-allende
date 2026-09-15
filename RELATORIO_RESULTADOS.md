@@ -46,9 +46,8 @@ $env:SUMO_HOME = "C:\Program Files (x86)\Eclipse\Sumo"
 
 Isto corre 200 decisões (cerca de 1000s simulados) com um agente **não
 treinado** (pesos aleatórios), só para veres a janela a abrir. Para veres um
-agente já treinado a decidir, é preciso carregar os pesos gravados (ver
-secção 4.3 abaixo, `carregar_pesos()`), ainda não há um script pronto para
-isso, é o próximo passo lógico depois do treino terminar.
+agente já treinado a decidir, usa `avaliar_agente.py --gui` (secção 4.5
+abaixo), que carrega os pesos treinados e corre sem exploração aleatória.
 
 **O que procurar na janela:** filas a formarem-se e esvaziarem-se junto ao
 semáforo; compara mentalmente com o baseline (semáforo de tempo fixo, corre
@@ -183,10 +182,30 @@ completo.)
 Tudo o que está acima é por `CENARIO`. Corre outra vez para `pico` depois de
 `baixo_fluxo` estar concluído.
 
-### 4.5. Ainda por fazer (depois do treino terminar)
+### 4.5. Avaliação final, depois do treino terminar
 
-- Script de avaliação final: carregar os pesos treinados
-  (`agente.carregar_pesos(...)`), correr uma simulação sem exploração
-  aleatória (`epsilon=0`), medir a espera média real do agente treinado,
-  comparar com o baseline. Ainda não existe, é o passo seguinte lógico.
+Já existe: `agente_dqn/avaliar_agente.py`. Carrega o modelo final de uma
+semente (gravado automaticamente pelo `train.py` em
+`outputs/modelos_treinados/<cenario>_semente<N>.weights.h5`), corre um
+episódio completo sem exploração aleatória (`epsilon=0`, só decisões "a
+sério"), e compara a espera média resultante com o baseline.
+
+```powershell
+cd sumo_project\agente_dqn
+$env:SUMO_HOME = "C:\Program Files (x86)\Eclipse\Sumo"
+.venv\Scripts\python.exe avaliar_agente.py --cenario baixo_fluxo --semente 0
+```
+
+Acrescenta `--gui` para veres o agente treinado a decidir ao vivo no
+`sumo-gui` (só funciona localmente, não no Colab, que não tem ecrã).
+
+**Importante:** este script mede uma corrida, não a média/desvio-padrão
+entre as 5 sementes que o `CLAUDE.md` exige (secção 3) para o Capítulo V.
+Para isso, corre `avaliar_agente.py` para cada semente (0 a 4) e calcula a
+média/desvio-padrão à mão (ou escreve um pequeno script que o faça,
+análogo ao `juntar_resultados.py`), depois de todas as sementes estarem
+treinadas.
+
+### 4.6. Por fazer, depois da avaliação de todas as sementes
+
 - Actualizar `PROGRESSO.md` e o Capítulo V do PFC com os números finais.
