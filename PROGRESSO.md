@@ -789,6 +789,63 @@ sem acesso a partir daqui. Passos que o autor ainda tem de fazer:
    corre até ao fim antes de subir para 100 (valor de trabalho, ver
    secção "checkpoint/resume" mais acima).
 
+## 2026-09-15 — Sessão 3: primeiro treino real no Colab, relatório de resultados
+
+**Primeiro treino real completo no Google Colab**, cenário baixo fluxo,
+semente 0, 20 episódios (valor de teste). Processo teve várias fricções
+resolvidas em conjunto com o autor:
+- `.gitignore` tinha uma regra (`outputs/treino_*.csv`) que bloqueava os
+  próprios ficheiros de resultado que o Colab tenta enviar, sobrava de uma
+  fase anterior em que só existia um `treino_<cenario>.csv` genérico.
+  Corrigida.
+- Sessão Colab reiniciou a meio (desligou), perdeu o clone; teve de
+  recomeçar do zero. O checkpoint no Drive não chegou a ser testado nessa
+  altura.
+- Token do GitHub sem permissão de escrita (`repo` não estava marcado por
+  completo), causou `403 Permission denied` no push. Resolvido com um
+  token novo.
+- `git pull` teve de correr no meio de tudo isto (várias sessões/commits
+  locais entretanto), ficou preso num editor de texto (`vim`) por não ter
+  usado `--no-edit`; resolvido escrevendo `:wq` e depois completando o
+  merge com `git commit --no-edit`.
+
+**Resultado:** recompensa desce de -2884 (episódio 1) para uma média à
+volta de -1400/-1700 no resto dos 20 episódios, confirma que o agente
+está a aprender. Guardado em `outputs/treino_baixo_fluxo_semente0.csv`.
+
+**Decisão do autor:** já não correr sementes em paralelo (5 sessões Colab
+ao mesmo tempo); correr as 5 sementes todas seguidas, numa única sessão.
+`treino_colab.ipynb` reescrito em conformidade:
+- Célula de configuração: `SEMENTES = 5` em vez de `SEMENTE` única.
+- Célula 4b (Drive): pasta partilhada por cenário (`.../baixo_fluxo/`
+  em vez de `.../baixo_fluxo_semente0/`), já que `train.py` separa os
+  ficheiros de checkpoint por semente dentro da mesma pasta.
+- Célula de treino: `train.py --sementes 5` em vez de `--semente-unica`.
+- Célula de envio: grava `outputs/treino_<cenario>.csv` (já com as 5
+  sementes juntas), e passou a fazer `git pull --no-edit` antes do
+  `push`, para evitar o problema de divergência encontrado no primeiro
+  teste.
+- `EPISODIOS` subiu de 20 para 100 (valor de trabalho definitivo).
+
+**Novo:** `agente_dqn/graficar_resultados.py`, gera um gráfico PNG da
+evolução da recompensa por episódio (uma linha por semente, mais a média
+a negrito), a partir do CSV de treino. Usa `matplotlib`, adicionado a
+`requirements.txt` (não estava lá, instalado e testado nesta sessão).
+Testado com os dados reais de 1 semente/20 episódios, gráfico legível,
+guardado em `outputs/grafico_treino_baixo_fluxo.png`.
+
+**Novo:** `RELATORIO_RESULTADOS.md` (raiz do projecto), documento pedido
+pelo autor explicando: que dados alimentam o algoritmo, onde ver a
+melhoria (visualmente no sumo-gui, no CSV, no gráfico, e por comparação
+com o baseline), que código treina o modelo (`sumo_env.py`/`dqn_agent.py`/
+`train.py`, com o papel de cada função), e o passo a passo completo do
+treino até ao gráfico final.
+
+**Pendente, identificado ao escrever o relatório:** ainda não existe um
+script de avaliação final (carregar pesos treinados, correr com
+`epsilon=0`, medir espera média real, comparar com o baseline). Próximo
+passo lógico depois do treino completo terminar.
+
 ## Como usar este ficheiro
 
 Cada sessão de trabalho futura deve acrescentar uma secção nova aqui, com
