@@ -938,6 +938,19 @@ sempre antes de apagar em lote.
 - Actualizar Capítulos II e IV com a comparação, só depois dos resultados
   finais e com confirmação do autor (regra do `CLAUDE.md`, secção 8/9).
 
+## 2026-09-15 — Sessão 3: reinício de sessão Colab, checkpoint não encontrado
+
+A sessão Colab do treino do DQN desligou (perdeu o clone, `/content` só
+tinha `sample_data`). Ao recomeçar, a célula 5 não mostrou "retomado do
+checkpoint": o checkpoint da semente 0 (feito antes desta sessão, ~20
+episódios) tinha sido gravado na pasta antiga do Drive
+(`pfc_checkpoints_dqn/baixo_fluxo_semente0/`, de quando cada sessão
+gravava numa pasta própria), e a célula 4b já aponta para a pasta nova
+partilhada (`pfc_checkpoints_dqn/baixo_fluxo/`), por isso não o
+encontrou. Dada a pequena quantidade de progresso em causa (~20 de 500
+episódios totais), decisão prática: deixar recomeçar do zero em vez de
+mover os ficheiros à mão entre pastas do Drive.
+
 ## Como usar este ficheiro
 
 Cada sessão de trabalho futura deve acrescentar uma secção nova aqui, com
