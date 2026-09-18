@@ -951,6 +951,61 @@ encontrou. Dada a pequena quantidade de progresso em causa (~20 de 500
 episódios totais), decisão prática: deixar recomeçar do zero em vez de
 mover os ficheiros à mão entre pastas do Drive.
 
+## 2026-09-15 — Sessão 4: recalibração dos bins do Q-learning tabular
+
+Antes de disparar o treino completo dos algoritmos de comparação, corrido
+um teste rápido (5 episódios, 1 semente, baixo fluxo) do Q-learning:
+`estados_vistos` ficava preso em 2, mesmo depois de todos os episódios,
+sinal de que a discretização do estado (`qlearning_agent.py`) estava a
+colapsar quase toda a simulação num só valor.
+
+**Causa confirmada por medição real:** script à parte (`sumo_env.py`
+directamente, sem Q-learning) mediu o máximo real de fila total e espera
+total nos 2 cenários, com um padrão de troca de fase realista (~40s por
+fase, não a cada passo): fila total máx. ~16-18 veículos, espera total
+máx. ~500-600s. Os limiares antigos (`FILA_POR_BIN=10`, `ESPERA_POR_BIN=480`,
+5 níveis cada) cobriam uma escala até 5x maior do que esta interseccão
+produz, por isso quase todos os episódios caíam no bin 0.
+
+**Corrigido:** `FILA_POR_BIN` de 10 para 4, `ESPERA_POR_BIN` de 480 para
+120, calibrados pelos valores medidos. Reteste (10 episódios, baixo
+fluxo): `estados_vistos` sobe de 2 para 10 e continua a crescer, em vez
+de estagnar. `README.md` de `algoritmos_comparacao/` actualizado com a
+explicação. Isto é uma correcção interna à discretização do próprio
+Q-learning (`qlearning_agent.py`), não muda o estado/acção/recompensa do
+`sumo_env.py` (os 17 valores continuam iguais para todos os algoritmos),
+por isso não activa a regra da secção 9 do `CLAUDE.md` sobre pedir
+confirmação antes de mudar a formulação de estado.
+
+**Pendente:** disparar o treino completo (5 sementes × 100 episódios) do
+Q-learning, PPO e A2C para os 2 cenários, agora com os bins corrigidos.
+
+## 2026-09-15/16 — Sessão 4: treino completo dos algoritmos de comparação
+
+Com os bins do Q-learning corrigidos, disparado o treino completo (5
+sementes × 100 episódios) localmente, sem necessidade de Colab (medido:
+Q-learning ~2,2s/episódio, PPO/A2C ~8-9s/episódio, tudo tranquilo nesta
+máquina):
+
+- **Q-learning:** concluído para os 2 cenários. `estados_vistos` chegou a
+  12 (baixo fluxo) e 38 (pico), confirma que a correcção dos bins
+  resolveu o colapso a 1-2 estados. Resultados em
+  `outputs/treino_baixo_fluxo_qlearning.csv` e
+  `outputs/treino_pico_qlearning.csv`.
+- **PPO e A2C:** disparados em sequência (não em paralelo, para não
+  competir por CPU e distorcer os tempos), para os 2 cenários cada,
+  estimativa total ~4-5h. Resultados a caminho de
+  `outputs/treino_<cenario>_<algoritmo>.csv`.
+
+**Pendente:**
+- Confirmar conclusão dos 4 treinos PPO/A2C.
+- Correr `comparar_algoritmos.py` para os 2 cenários, com os 4 algoritmos
+  (DQN do Colab, Q-learning, PPO, A2C).
+- Calcular média/desvio-padrão entre as 5 sementes de cada algoritmo
+  (exigido pelo `CLAUDE.md`, secção 3) antes de tirar conclusões.
+- Actualizar Capítulos II e IV com a comparação final, só depois de
+  confirmação explícita do autor (regra da secção 8/9 do `CLAUDE.md`).
+
 ## Como usar este ficheiro
 
 Cada sessão de trabalho futura deve acrescentar uma secção nova aqui, com

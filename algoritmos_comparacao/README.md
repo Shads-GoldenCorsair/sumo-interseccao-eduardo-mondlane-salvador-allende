@@ -61,10 +61,14 @@ Depois de teres resultados de pelo menos 2 algoritmos:
 - **Q-learning** não tem checkpoint/resume (ao contrário do DQN). O
   treino tabular é bem mais rápido de repetir do zero do que o DQN, por
   isso não se considerou necessário para já.
-- **Q-learning**, a discretização do estado (fila total ÷10, espera
-  total ÷480, em 5 níveis cada) é uma escolha grosseira, não afinada; se
-  o Q-learning tiver um desempenho muito fraco na comparação final, vale
-  a pena rever estes limiares antes de concluir que o método é inferior.
+- **Q-learning**, a discretização do estado (fila total ÷4, espera
+  total ÷120, em 5 níveis cada) foi calibrada por medição real dos
+  valores máximos nos 2 cenários (fila total ~16-18, espera total
+  ~500-600s), depois de se detectar que os limiares iniciais (÷10 e
+  ÷480) cobriam uma escala maior do que esta interseccão produz e
+  colapsavam quase todo o treino a 1-2 estados distintos (ver
+  PROGRESSO.md). Ainda é uma escolha discreta, não uma garantia de
+  optimalidade, mas já distingue estados de facto diferentes.
 - **PPO** usa `n_steps` igual à duração de um episódio (~720 passos),
   para o `stable-baselines3` não cortar episódios a meio ao recolher a
   amostra para actualizar a política.

@@ -17,8 +17,13 @@ from collections import defaultdict
 
 NUM_BINS_FILA = 5
 NUM_BINS_ESPERA = 5
-FILA_POR_BIN = 10       # veiculos (soma das 8 faixas) por cada nivel discreto
-ESPERA_POR_BIN = 480    # segundos (soma das 8 faixas) por cada nivel discreto
+# Calibrado por medicao real nos 2 cenarios (ver PROGRESSO.md): fila total
+# max ~16-18 veiculos, espera total max ~500-600s. Os valores antigos
+# (10 e 480) cobriam uma escala ate 5x maior do que esta interseccao produz,
+# por isso quase todos os episodios cabiam no bin 0, colapsando o Q-learning
+# a so 1-2 estados distintos.
+FILA_POR_BIN = 4        # veiculos (soma das 8 faixas) por cada nivel discreto
+ESPERA_POR_BIN = 120     # segundos (soma das 8 faixas) por cada nivel discreto
 
 
 def discretizar(estado):

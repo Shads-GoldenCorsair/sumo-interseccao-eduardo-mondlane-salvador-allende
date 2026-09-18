@@ -38,7 +38,8 @@ from sumo_env import AmbienteSumo
 RAIZ = os.path.dirname(__file__)
 PASTA_CHECKPOINTS = os.path.join(RAIZ, "..", "outputs", "_checkpoints")
 PASTA_MODELOS = os.path.join(RAIZ, "..", "outputs", "modelos_treinados")
-CHECKPOINT_CADA = 10  # episodios
+# CHECKPOINT_CADA = 10  # episodios
+CHECKPOINT_CADA = 5  # episodios (salva pesos e progresso no Drive a cada 5 episodios)
 
 
 def correr_episodio(ambiente, agente, treinar=True):
@@ -96,6 +97,7 @@ def treinar_uma_semente(caminho_sumocfg, cenario, semente, num_episodios, caminh
             ultima_recompensa = recompensa
             escritor.writerow([semente, episodio + 1, recompensa])
             f.flush()
+            os.fsync(f.fileno())
 
             if (episodio + 1) % ACTUALIZAR_REDE_ALVO_CADA == 0:
                 agente.actualizar_rede_alvo()
